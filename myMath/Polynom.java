@@ -54,6 +54,14 @@ public class Polynom implements Polynom_able{
 		s=s.replaceAll("\\)","");
 		s=s.replaceAll("\\(","");
 		
+		if(s.charAt(0)=='+') {
+			s = s.substring(1,s.length());
+		}
+		
+		if(s.length()==0) {
+			throw new RuntimeException("Invalid value used to create a polynom");
+		}
+		
 		String[] ps = s.split(Pattern.quote("+"));//Dividing between the '+' to a strings array
 		for(int i=0; i<ps.length; i++) {
 			if(ps[i].charAt(0)=='x') {
