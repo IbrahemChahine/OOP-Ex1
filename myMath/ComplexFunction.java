@@ -4,7 +4,10 @@ public class ComplexFunction implements complex_function {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1785701227096562369L;
+	/**
+	 * 
+	 */
 	private function left;
 	private function right;
 	private Operation Op;
@@ -200,13 +203,28 @@ public class ComplexFunction implements complex_function {
 		case "mul":
 			answer = Operation.Times;
 			break;
+		case "multiply":
+			answer = Operation.Times;
+			break;
+		case "times":
+			answer = Operation.Times;
+			break;
 		case "div":
+			answer = Operation.Divid;
+			break;
+		case "divid":
 			answer = Operation.Divid;
 			break;
 		case "max":
 			answer = Operation.Max;
 			break;
+		case "maximum":
+			answer = Operation.Max;
+			break;
 		case "min":
+			answer = Operation.Min;
+			break;
+		case "minimum":
 			answer = Operation.Min;
 			break;
 		case "comp":

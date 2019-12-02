@@ -17,6 +17,10 @@ import myMath.Monom;
  *
  */
 public class Polynom implements Polynom_able{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7415068870735956797L;
 	private ArrayList <Monom> Polynom;
 	private final Monom_Comperator comperator = new Monom_Comperator();
 	/**
@@ -248,7 +252,7 @@ public class Polynom implements Polynom_able{
 	 * 
 	 */
 	@Override
-	public boolean isZero() {
+	public boolean isZero() { //TODO - get rid of monom's with zero coefficient. Otherwise this method will fail.
 		if (Polynom.isEmpty()) return true;
 		return false;
 	}
@@ -382,7 +386,6 @@ public class Polynom implements Polynom_able{
 	}
 	@Override
 	public function initFromString(String s) {
-		
-		return null;
+		return new Polynom(s);
 	}
 }
