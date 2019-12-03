@@ -1,7 +1,9 @@
 package myMath;
 
 import java.util.ArrayList;
+import myMath.Functions_GUI;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.StringTokenizer;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -52,20 +54,32 @@ public class Polynom implements Polynom_able{
 	 * @param s2  It gonna be converted to _power or as we called it in the function below - pow.
 	 * @param j  its gonna help us to determine the index of the 'x' and the '*'
 	 */
+	/*
+	public Polynom(String str){//string constractor
+		str = str.replaceAll("X", "x");	
+		this.Polynom=new ArrayList<Monom>(0);
+		str = str.replaceAll("\\-", "+-");
+		str = str.replaceAll("\\*", "");
+		if(str.charAt(0)=='+') {
+			str=str.substring(1);
+		}
+		for(String m :str.split("\\+")) Polynom.add(new Monom(m));
+		Polynom.sort(new Monom_Comperator());	
+	}
+	*/
 	public Polynom(String s) {
 		Polynom = new ArrayList<>();
-		s=s.replaceAll("\\s","");// replacing all unnecessary chars
+		//s=s.replaceAll("\\s","");// replacing all unnecessary chars
+		s=s.replaceAll("\\s","");
 		s=s.replaceAll("\\)","");
 		s=s.replaceAll("\\(","");
-		
+		s = s.replaceAll("\\-", "+-");
 		if(s.charAt(0)=='+') {
 			s = s.substring(1,s.length());
 		}
-		
 		if(s.length()==0) {
 			throw new RuntimeException("Invalid value used to create a polynom");
-		}
-		
+		}	
 		String[] ps = s.split(Pattern.quote("+"));//Dividing between the '+' to a strings array
 		for(int i=0; i<ps.length; i++) {
 			if(ps[i].charAt(0)=='x') {
@@ -388,4 +402,46 @@ public class Polynom implements Polynom_able{
 	public function initFromString(String s) {
 		return new Polynom(s);
 	}
+	public void GUI(double x0, double x1, double eps) {
+
+		System.out.println("The total area on the X axis is: " );
+		System.out.println(area(x0, x1, eps));
+		System.out.println();
+		Functions_GUI frame = new Functions_GUI(this, x0, x1, eps);
+
+		frame.setVisible(true);
+
+	}
+	public LinkedList<Double> extremaPoints(double x0, double x1, double eps) {
+
+		LinkedList<Double> answer = new LinkedList<>();
+
+		if (x0 > x1)
+
+			return answer;
+
+		Polynom der = (Polynom)this.derivative();
+
+		double pointer = x0;
+
+		while (pointer <= x1) {
+
+			double changeDer = der.f(pointer)*der.f(pointer-eps); 
+
+			if (changeDer < 0 )
+
+				answer.add(pointer);
+
+			else if (changeDer == 0 && der.f(pointer)==0) //pointer is extreme point
+
+				answer.add(pointer);
+
+			pointer += eps;
+
+		}
+
+		return answer;
+
+	}
+
 }
