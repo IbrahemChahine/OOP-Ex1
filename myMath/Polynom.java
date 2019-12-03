@@ -73,7 +73,7 @@ public class Polynom implements Polynom_able{
 		s=s.replaceAll("\\s","");
 		s=s.replaceAll("\\)","");
 		s=s.replaceAll("\\(","");
-		s = s.replaceAll("\\-", "+-");
+		s=s.replaceAll("\\-", "+-");
 		if(s.charAt(0)=='+') {
 			s = s.substring(1,s.length());
 		}
