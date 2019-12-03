@@ -320,4 +320,14 @@ public class ComplexFunction implements complex_function {
 		function f = initFromString(s);
 		return f;
 	}
+	
+	
+	public boolean equals(Object obj) {
+		if(this.toString().contentEquals(obj.toString())) return true;
+		
+		
+		
+		return false;
+	}
+	
 }

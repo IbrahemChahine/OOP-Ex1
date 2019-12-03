@@ -971,7 +971,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	 * @param  x the <em>x</em>-coordinate of the pixel
 	 * @param  y the <em>y</em>-coordinate of the pixel
 	 */
-	private static void pixel(double x, double y) {
+	static void pixel(double x, double y) {
 		offscreen.fillRect((int) Math.round(scaleX(x)), (int) Math.round(scaleY(y)), 1, 1);
 	}
 

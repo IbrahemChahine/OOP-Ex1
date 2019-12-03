@@ -91,14 +91,14 @@ class Functions_GUITest {
 		function cf6 = cf4.initFromString(s2);
 		ans.add(cf5.copy());
 		ans.add(cf6.copy());
-		ComplexFunction max = new ComplexFunction(ans.get(0).copy());
-		ComplexFunction min = new ComplexFunction(ans.get(0).copy());
+		//ComplexFunction max = new ComplexFunction(ans.get(0).copy());
+		//ComplexFunction min = new ComplexFunction(ans.get(0).copy());
 		for(int i=1;i<ans.size();i++) {
-			max.max(ans.get(i));
-			min.min(ans.get(i));
+			//max.max(ans.get(i));
+			//min.min(ans.get(i));
 		}
-		ans.add(max);
-		ans.add(min);
+		//ans.add(max);
+		//ans.add(min);
 		
 		return ans;
 	}

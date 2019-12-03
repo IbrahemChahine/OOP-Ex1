@@ -402,46 +402,6 @@ public class Polynom implements Polynom_able{
 	public function initFromString(String s) {
 		return new Polynom(s);
 	}
-	public void GUI(double x0, double x1, double eps) {
 
-		System.out.println("The total area on the X axis is: " );
-		System.out.println(area(x0, x1, eps));
-		System.out.println();
-		Functions_GUI frame = new Functions_GUI(this, x0, x1, eps);
-
-		frame.setVisible(true);
-
-	}
-	public LinkedList<Double> extremaPoints(double x0, double x1, double eps) {
-
-		LinkedList<Double> answer = new LinkedList<>();
-
-		if (x0 > x1)
-
-			return answer;
-
-		Polynom der = (Polynom)this.derivative();
-
-		double pointer = x0;
-
-		while (pointer <= x1) {
-
-			double changeDer = der.f(pointer)*der.f(pointer-eps); 
-
-			if (changeDer < 0 )
-
-				answer.add(pointer);
-
-			else if (changeDer == 0 && der.f(pointer)==0) //pointer is extreme point
-
-				answer.add(pointer);
-
-			pointer += eps;
-
-		}
-
-		return answer;
-
-	}
 
 }
