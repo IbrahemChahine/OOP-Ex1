@@ -1,12 +1,15 @@
 package myMath;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
 import myMath.Functions_GUI;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+
 
 import myMath.Monom;
 /**
@@ -23,7 +26,7 @@ public class Polynom implements Polynom_able{
 	 * 
 	 */
 	private static final long serialVersionUID = -7415068870735956797L;
-	private ArrayList <Monom> Polynom;
+	private ArrayList <Monom> Polynom = new ArrayList<Monom>();
 	private final Monom_Comperator comperator = new Monom_Comperator();
 	/**
 	 * Default constructor
@@ -68,74 +71,44 @@ public class Polynom implements Polynom_able{
 	}
 	*/
 	public Polynom(String s) {
-		Polynom = new ArrayList<>();
-		//s=s.replaceAll("\\s","");// replacing all unnecessary chars
-		s=s.replaceAll("\\s","");
-		s=s.replaceAll("\\)","");
-		s=s.replaceAll("\\(","");
-		s=s.replaceAll("\\-", "+-");
-		if(s.charAt(0)=='+') {
-			s = s.substring(1,s.length());
-		}
-		if(s.length()==0) {
-			throw new RuntimeException("Invalid value used to create a polynom");
-		}	
-		String[] ps = s.split(Pattern.quote("+"));//Dividing between the '+' to a strings array
-		for(int i=0; i<ps.length; i++) {
-			if(ps[i].charAt(0)=='x') {
-				ps[i] = "1" + ps[i];
-			}
-			if(ps[i].charAt(0)=='-' && ps[i].charAt(1)=='x') {
-				String s2 = ps[i];
-				ps[i] = s2.substring(0,0)+"-1"+s2.substring(1);
-			} 
-			else if(ps[i].charAt(0)=='-' && ps[i].charAt(1)!='x') {
-				String s3 = ps[i];
-				ps[i] = s3.substring(0,0)+"-"+s3.substring(1);
+		s = s.replaceAll(" ", ""); //remove spaces
+		if (s.equals("") || s.equals("EmptyPolynom")) {return;}		
+		//empty string or copying from an empty polynom - the polynom will be empty.
+
+		StringTokenizer st = new StringTokenizer(s,"+-", true);
+		ArrayList<String> stringPartsArrayList = new ArrayList<String>();
+		while(st.hasMoreTokens()) {
+			String temp = st.nextToken();
+			if(temp.equals("+")) {stringPartsArrayList.add(st.nextToken());}
+			else if(temp.equals("-")) {stringPartsArrayList.add('-'+st.nextToken());}
+			else {stringPartsArrayList.add(temp);}
+		} //end while
+
+		//Each +- sign will be used as tokens, to seperate monoms making up the polynom.
+		//+ signs shouldn't matter, just add a monom.
+		//- signs will be given as part of the string to the monom constructor
+		//to assure the monom will have a negative coefficient.
+
+		try {
+			for (String i: stringPartsArrayList) {
+				this.add(new Monom(i));
 			}
 		}
-		int i=0;
-		while(i<ps.length) {
-			double co=0;
-			int pow=0;
-			String s1;//represents the coefficient.
-			String s2;//represent the power
-			//the following if will only accept a String that starts with the terms we have established (read ReadMe)
-			if(Character.isDigit(ps[i].charAt(0)) || ps[i].charAt(0)=='-' || ps[i].charAt(0)=='+') 	{
-				if(ps[i].contains("x")) {
-					if(ps[i].contains("*")) {//in case there's '*'.
-						int j=ps[i].indexOf('*'); 
-						s1= ps[i].substring(0, j);
-						s2=ps[i].substring(j+3, ps[i].length());
-						co=Double.parseDouble(s1);
-						pow=(int) Double.parseDouble(s2);
-					}
-					else {//if there isn't any '*'.
-						int j=ps[i].indexOf('x');
-						s1 = ps[i].substring(0, j);
-						if(j+2<ps[i].length()) {
-							s2=ps[i].substring(j+2, ps[i].length());
-							co=Double.parseDouble(s1);
-							pow=(int) Double.parseDouble(s2);
-						}
-						else {
-							co=Double.parseDouble(s1);
-						}
-					}
-				}
-				else {//if ther isn't any 'x'
-					co=Double.parseDouble(ps[i]);
-				}
-				Monom m = new Monom(co,pow);//creating the monom with co and pow that were set by the String.
-				Polynom.add(m);
-				i++;
-			}
-			else {//if the String doesn't starts in the terms we have set.
-				break;
-			}
+		catch(Exception e) {
+			System.err.println("Invalid input for one or more power(s) or coefficient(s)! Created Polynom will be empty!");
+			this.Polynom.clear();
+			throw new IllegalArgumentException();
 		}
-		Polynom.sort(comperator);//sorting 
+		//Receiving an exception here can only happen from an invalid power for a Monom that is part of the Polynom.
+		//If this happens, I choose to instead create an empty Polynom - so as to not calculate wrong values for it, should I be requsted to.
+		//My reason being - having all calculating functions (area, root) return 0 for it, should make it obvious for the user there is a mistake.
+
+		Collections.sort(this.Polynom, new Monom_Comperator());
+		this.cleanZeroCoefficient();
+		//I want the Polynom to be organized. Do this by power level of each monom.
+		//Also, there might be monoms with 0 coefficient. Delete those, as they are useless.
 	}
+
 	/**
 	 * The function will return the value of f(x).
 	 * @param sum: the sum of value of f(x) in every one of the monoms.
@@ -175,7 +148,7 @@ public class Polynom implements Polynom_able{
 	@Override
 	public void add(Monom m1) {
 		boolean flag = false;
-		Iterator<Monom> it = Polynom.iterator();
+		Iterator<Monom> it = this.iteretor();
 		if(m1.get_coefficient()!=0) {
 			while(it.hasNext()) {
 				Monom m = it.next();
@@ -381,27 +354,42 @@ public class Polynom implements Polynom_able{
 		Polynom.clear();
 	}
 	
-	public String toString() { // toString function
-		String polystring="";
-		Iterator<Monom> it = this.iteretor();
-		if(this.isZero())
-			polystring+="0";
-		else {
-			while(it.hasNext()) {
-				Monom m =it.next();
-				if(m.get_coefficient()!=0) {
-					polystring+=m.toString();
-					if(it.hasNext())
-						polystring+=" + ";
-				}
+	public String toString() {
+		String answer = "";
+		if(this.isZero()) {return "EmptyPolynom";}
+
+		for (Monom i:this.Polynom) {
+			if (i.get_coefficient()<0) {
+				answer = answer + i.toString();
+			}
+			else if (!answer.isEmpty()){
+				answer = answer + "+" + i.toString();
+			}
+			else if (answer.isEmpty()){
+				answer = i.toString();
 			}
 		}
-		return polystring;
+		return answer;
 	}
 	@Override
 	public function initFromString(String s) {
 		return new Polynom(s);
 	}
+	public void cleanZeroCoefficient() {
+		int monomIndex = -1;
+		Iterator<Monom> itr = this.iteretor();
+		Monom current;
+		while(itr.hasNext()) {
+			current = itr.next();
+			monomIndex+=1;
+			if (current.get_coefficient()==0) {
+				Polynom.remove(monomIndex);
+				itr = this.iteretor();
+				monomIndex=-1;
+			} //end if
+		}// end for
+	}// end function
+
 
 
 }

@@ -1,23 +1,27 @@
 package myMath;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 public class Functions_GUI implements functions {
-	private ArrayList<function> group = new ArrayList<function>();
+	public ArrayList<function> group = new ArrayList<function>();
+	
 	@Override
 	public boolean add(function arg0) {
-//		if(arg0 instanceof Polynom) {
-////			Polynom tempPoly = new Polynom((Polynom) arg0);
-////			this.group.add(tempPoly);
-//		}
-//		else if(arg0 instanceof Monom) {
-//			this.group.add((Monom)arg0);
-//		}
-//		else {
-//			this.group.add((ComplexFunction)arg0);
-//		}
-//		System.out.println("I am here " + arg0.toString());
+		//		if(arg0 instanceof Polynom) {
+		////			Polynom tempPoly = new Polynom((Polynom) arg0);
+		////			this.group.add(tempPoly);
+		//		}
+		//		else if(arg0 instanceof Monom) {
+		//			this.group.add((Monom)arg0);
+		//		}
+		//		else {
+		//			this.group.add((ComplexFunction)arg0);
+		//		}
+		//		System.out.println("I am here " + arg0.toString());
 		this.group.add(arg0);
 		return true;
 	}
@@ -41,7 +45,35 @@ public class Functions_GUI implements functions {
 		if(!(arg0 instanceof function)) {
 			throw new RuntimeException("Was asked to check if a Functions_GUI object contains a non-function object - illegal");
 		}
-		return group.contains(arg0);
+		Iterator<function> itr = this.iterator();
+		boolean answer = false;
+		while(itr.hasNext() && !answer) {
+			
+			function current = itr.next();
+			if(current==arg0) {return true;} //in case they point at the same object
+			
+			//Cast the current function object
+			if(current instanceof Monom) {
+				Monom temp = (Monom) current;
+				System.out.println("Now comparing with " + temp.toString());
+				if(temp.toString().contentEquals(arg0.toString())) {answer=true;}
+			}
+			else if(current instanceof Polynom) {
+				Polynom temp = (Polynom) current;
+				System.out.println("Now comparing with " + temp.toString());
+				if(temp.toString().contentEquals(arg0.toString())) {answer=true;}
+			}
+			else {
+				ComplexFunction temp = (ComplexFunction) current;
+				System.out.println("Now comparing with " + temp.toString());
+				if(temp.toString().contentEquals(arg0.toString())) {answer=true;}
+			}
+			
+//			System.out.println("Now comparing with " + temp.toString());
+			
+//			if(temp.toString().contentEquals(arg0.toString())) {answer=true;}
+		}
+		return answer;
 	}
 
 	@Override
@@ -128,7 +160,29 @@ public class Functions_GUI implements functions {
 
 	@Override
 	public void initFromFile(String file) throws IOException {
-		// TODO Auto-generated method stub
+		String line = null;
+		try {
+			FileReader fileReaderr = new FileReader(file);
+			BufferedReader bufferedReader = new BufferedReader(fileReaderr);
+			while((line = bufferedReader.readLine()) != null) {
+				line = line.replaceAll(" ", "");
+				
+				if(line.contains(",")) {
+					ComplexFunction newCF = new ComplexFunction();
+					newCF.initFromString(line);
+					this.add(newCF);
+				}
+				else { //this line is Polynom or Monom. We will make it a polynom
+					Polynom newPoly = new Polynom(line);
+					this.add(newPoly);
+
+				} //end Polynom/Monom line case
+			} //end While   
+			bufferedReader.close();
+
+		}
+		catch(FileNotFoundException ex){throw ex;}
+		catch(IOException ex) {throw new RuntimeException("Error reading file " + file + ". Cause described as " + ex.getMessage());}
 
 	}
 

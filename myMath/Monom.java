@@ -1,5 +1,7 @@
 package myMath;
 import java.util.Comparator;
+
+import javax.management.RuntimeErrorException;
 /**
  * This class represents a simple "Monom" of shape a*x^b, where a is a real number and a is an integer (summed a none negative), 
  * see: https://en.wikipedia.org/wiki/Monomial 
@@ -25,7 +27,7 @@ public class Monom implements function{
 	public Monom(Monom ot) {// copy constructor.
 		this(ot.get_coefficient(), ot.get_power());
 	}
-	
+
 	public double get_coefficient() {// get _coefficient.
 		return this._coefficient;
 	}
@@ -58,76 +60,112 @@ public class Monom implements function{
 	 * 		s = {"x^2","5x^7","-11111x^9","10.5x","10"}.
 	 */
 	public Monom(String s) {
-		s = s.toLowerCase();
-		if(s.contains("x")&&s.charAt(s.length()-1)!='x'&&!s.contains("^")) {
-			throw new RuntimeException("You inputed an invalid string that present a Monom");
+		s = s.replaceAll(" ", ""); //remove spaces
+		if(s.isBlank()) {
+			System.err.println("Entered string is empty. Monom will be created as 0x^0.");
+			this.set_coefficient(0);
+			this.set_power(0);
+			return;
 		}
-		if((s.contains("x"))&&s.contains("^")&&(s.indexOf("x")>s.indexOf("^"))) {
-			throw new RuntimeException("You inputed an invalid string that present a Monom");
+		if(s.endsWith("^")) {
+			System.err.println("Invalid power! Monom will be created empty, and throwing IllegalArgumentException!");
+			throw new IllegalArgumentException();
 		}
-		if((s.contains("x"))&&s.contains("^")&&(s.charAt(s.length()-1))=='^') {
-			throw new RuntimeException("You inputed an invalid string that present a Monom");
+
+		int Xposition = -1;
+		boolean KeepWorking = true;
+		for (int i = 0; i < s.length() && KeepWorking; i++) {
+			String sub = s.substring(i, i+1).toUpperCase();
+			if(sub.equals("X"+"")) {
+				Xposition = i;
+				KeepWorking = false;
+			}
 		}
-		if((s.contains("x"))&&s.contains("^")&&(s.charAt(s.indexOf("^")-1)!='x')) {
-			throw new RuntimeException("You inputed an invalid string that present a Monom");
+
+		if(Xposition<s.length()-1) { 
+			if(Xposition!=-1 && s.charAt(Xposition+1)!='^') {
+				System.err.println("Invalid input! Created Monom will be empty!");
+				return;
+			}
 		}
-		if(s.length()==1) {
-			if(s.charAt(0)=='x') {
+
+		//if Xposition remains -1, no X was found. This means this monom's power is 0.
+		//if Xposition is 0 this means the coefficient is 1.
+		//else, I found X somewhere else. Up until that position is the coefficient.
+		//After that and the symbol '^', if it's there, is the power of the monom.
+
+		switch (Xposition) {
+
+		case -1:
+			try {
+				this.set_coefficient(Double.parseDouble(s));
+			}
+			catch (Exception e) {
+				System.err.println("Invalid coefficient! Monom will be created empty, and throwing IllegalArgumentException!");
+				throw new IllegalArgumentException();
+			}
+
+			this.set_power(0);
+			break;
+			//In this case Xposition is -1, meaning 'X' isn't in the string, and so all of it is the coefficient.
+
+		case 0: //no coefficient stated before X, so it's 1.
+			if (s.length()==1) { //input is "X"
 				this.set_coefficient(1);
 				this.set_power(1);
+				//Must have this case - otherwise the code will try to access the string at a place greater then it's length
+				//(Out of bounds)
 			}
 			else {
-				double a = Double.valueOf(s);
-				this.set_coefficient(a);
-				this.set_power(0);
-			}
-		}
-		else if(s.length()==2 && s.charAt(0)=='-' && s.charAt(1) == 'x') {
-			this.set_coefficient(-1);
-			this.set_power(1);
-		}
-		else {
-			String str = "";
-			int n=0;
-			if(s.charAt(0)=='x') {
-				s = "1" + s;
-			}
-			if(s.charAt(0)=='-'&&s.charAt(1)=='x') {
-				String s2 = s;
-				s = s2.substring(0,0)+"-1"+s2.substring(1);
-			} 
-			for(int i = 0; i<s.length(); i++) {
-				if(s.charAt(i) == 'x') {
-					n=i;
-					break;
+				try {
+					this.set_power(Integer.parseInt(s.substring(2, s.length())));
+					this.set_coefficient(1);
 				}
-				else if (s.charAt(i) == '*') {;}
-				else {
-					str = str + s.charAt(i);
+
+				catch(Exception e){
+					System.err.println("Invalid coefficient! Monom will be created empty, and throwing IllegalArgumentException!");
+					throw new IllegalArgumentException();
 				}
+
+				//In this case X is the first char in the string. Thus coefficient is 1.
+				//The rest of the string is the power. I am parsing the relevant substring and parsing/casting it to int.
 			}
-			double a = Double.valueOf(str);
-			this.set_coefficient(a);
-			str = "";
-			if(n==0) {
-				this.set_power(0);
+			break; //end case 0
+
+		default:
+			String coefficient = s.substring(0,Xposition);
+			if (coefficient.equals("-")) {
+				this.set_coefficient(-1);
 			}
 			else {
-				for(int i = n; i<s.length(); i++) {
-					if(s.charAt(i) == 'x') {;}
-					else if(s.charAt(i) == '^') {;}
-					else {
-						str = str + s.charAt(i);
-					}
+				try {
+					this.set_coefficient(Double.parseDouble(coefficient));
 				}
-				if(str=="") {
-					this.set_power(1);
+				catch(Exception e) {
+					throw new RuntimeException("Can't use the value given as coefficient. Please check your input.");
 				}
-				else {
-					int b = Integer.parseInt(str);
-					this.set_power(b);
-				}
+
 			}
+			
+			try { //now set power
+
+				int power;
+				if (Xposition+2>=s.length()) {power = 1;} //If X is at the end of the string, the power is 1.
+
+				else {power = Integer.parseInt(s.substring(Xposition+2,s.length()));} //else, use substring to extract the power and convert it to integer.
+
+				this.set_power(power);
+			} catch (Exception e) {
+				System.err.println("Invalid coefficient or power! Monom will be created empty, and throwing IllegalArgumentException!");
+				throw new IllegalArgumentException();
+			}
+
+
+			//In the default case Xposition is somewhere within the string.
+			//Until Xposition is the coefficient. After that is the power.
+			//As it is possible there will not be a '^' symbol, I make sure to check the string's length.
+			//If it is greater then Xposition+2, there is a '^' symbol and numbers after to indicate the power.
+			//Otherwise the power is 1.
 		}
 	}
 	/**
@@ -140,8 +178,8 @@ public class Monom implements function{
 			this._coefficient += m._coefficient;
 		} 
 		else {
-            throw new RuntimeException("Inorder to add a Monom the power of the Monoms should be the same.");
-        }
+			throw new RuntimeException("Inorder to add a Monom the power of the Monoms should be the same.");
+		}
 	}
 	/**
 	 * The function multiplys two Monoms
@@ -170,23 +208,17 @@ public class Monom implements function{
 	 * returns a String represented as a monom.
 	 */
 	public String toString() {
-		String s="";
-		if(this.get_power()==0) { // when the power is 0 case 
-			if(this.get_coefficient()>0)
-				s+=this.get_coefficient();
-			else if(this.get_coefficient()<0)
-				s+=""+this.get_coefficient()+"";
-			else s+="0";
+		String ans;
+		if(this.get_coefficient()==0) {return "";}
+		int power = this.get_power();
+		if (power==0) {
+			ans = Double.toString(this.get_coefficient());
+		}
+		else {
+			ans = (this.get_coefficient() + "X^" + power);
 		}
 
-		else {
-			if(this.get_coefficient()>0) // when the power is not 0 case
-				s+=this._coefficient+"*"+"x"+"^"+this._power;
-			else if(this.get_coefficient()<0)
-				s+=this._coefficient+"*"+"x"+"^"+this._power;
-			else s+="0";
-		}
-		return s;
+		return ans;
 	}
 	// you may (always) add other methods.
 
@@ -211,6 +243,6 @@ public class Monom implements function{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
+
+
 }
