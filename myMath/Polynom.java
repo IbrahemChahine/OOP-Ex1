@@ -174,7 +174,7 @@ public class Polynom implements Polynom_able{
 		Monom minus = new Monom(-1,0);
 		Iterator<Monom> it = p1.iteretor();
 		while(it.hasNext()) {
-			Monom m=it.next();
+			Monom m= new Monom(it.next());
 			m.multiply(minus);
 			this.add(m);
 		}
@@ -268,7 +268,7 @@ public class Polynom implements Polynom_able{
 			fMid = f(mid);
 			fX0=this.f(x0);
 		}
-		return fMid;
+		return mid;
 	}
 	/**
 	 * @return a Polynom that is a copy of another Polynom

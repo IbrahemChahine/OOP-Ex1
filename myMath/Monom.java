@@ -176,6 +176,9 @@ public class Monom implements function{
 	public void add(Monom m) {
 		if(this._power == m._power) {
 			this._coefficient += m._coefficient;
+			int temp = (int)(this._coefficient*10000000);
+			this._coefficient = (double)temp/10000000; //compensating for up to 0.0000001 [EPSILON] mistake
+			
 		} 
 		else {
 			throw new RuntimeException("Inorder to add a Monom the power of the Monoms should be the same.");
@@ -197,7 +200,18 @@ public class Monom implements function{
 	 * @param l - the monom that is checked.
 	 */
 	public boolean equals(Monom l) {
-		if(this.get_coefficient() == l.get_coefficient() && get_power() == l.get_power()){
+		double co1 = this.get_coefficient();
+		double co2 = l.get_coefficient();
+		if(co1==0) {
+			if(co2==0) {return true;}
+			else {return false;}
+		}
+		int temp1 = (int)(co1*10000000);
+		co1 = (double)(temp1/10000000);
+		int temp2 = (int)(co2*10000000);
+		co2 = (double)(temp2/10000000); //compensating for up to 0.0000001 [EPSILON] mistake
+		
+		if(co1 == co2 && get_power() == l.get_power()){
 			return true;
 		}
 		else {
@@ -208,6 +222,7 @@ public class Monom implements function{
 	 * returns a String represented as a monom.
 	 */
 	public String toString() {
+		if(this.isZero()) {return "0";}
 		String ans;
 		if(this.get_coefficient()==0) {return "";}
 		int power = this.get_power();
