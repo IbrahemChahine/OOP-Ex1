@@ -36,6 +36,10 @@ public class ComplexFunction implements complex_function {
 		this.Op = OP;
 	}
 
+	public ComplexFunction(function left) {
+		this.left = left;
+		this.Op = Operation.None;
+	}
 	/** Add to this complex_function the f1 complex_function 
 	 * @param f1 the complex_function which will be added to this complex_function.
 	 */
@@ -299,20 +303,73 @@ public class ComplexFunction implements complex_function {
 		return helper;
 	}
 	public String toSrting() {
-		return toString(this);
+		String left;
+		String right;
+		
+		if(this.left instanceof ComplexFunction) {
+			left = toString((ComplexFunction) this.left);
+		}
+		else if(this.left instanceof Polynom) {
+			left = ((Polynom) this.left).toString();
+		}
+		else{
+			left = ((Monom) this.left).toString();
+		}
+		
+		if(this.right==null) {right="";}
+		else if(this.right instanceof ComplexFunction) {
+			right = toString((ComplexFunction) this.right);
+		}
+		else if(this.right instanceof Polynom) {
+			right = ((Polynom) this.right).toString();
+		}
+		else{
+			right = ((Monom) this.right).toString();
+		}
+		
+		return this.Op + "(" + left + "," + right + ")";
+//		return toString(this);
+		
 	}
 	//new, not on github.
 	public String toString(ComplexFunction s) {
-		if(s.left instanceof ComplexFunction && s.right instanceof ComplexFunction) {
-			return s.Op + "(" + toString((ComplexFunction) s.left) + "," + toString((ComplexFunction) s.right) + ")";
+		String left;
+		String right;
+		
+		if(s.left instanceof ComplexFunction) {
+			left = toString((ComplexFunction) s.left);
 		}
-		else if(s.left instanceof ComplexFunction) { // we need to add right = NULL case
-			return s.Op+"("+toString((ComplexFunction) s.left)+","+s.right.toString() + ")";
+		else if(s.left instanceof Polynom) {
+			left = ((Polynom) s.left).toString();
 		}
+		else{
+			left = ((Monom) s.left).toString();
+		}
+		
+		if(s.right==null) {right="";}
 		else if(s.right instanceof ComplexFunction) {
-			return s.Op +"("+ s.left.toString() +","+ toString((ComplexFunction) s.right) +")";
+			right = toString((ComplexFunction) s.right);
 		}
-		return s.Op + "(" + s.left.toString() + " , " + s.right.toString() + ")";
+		else if(s.right instanceof Polynom) {
+			right = ((Polynom) s.right).toString();
+		}
+		else{
+			right = ((Monom) s.right).toString();
+		}
+		
+		return s.Op + "(" + left + "," + right + ")";
+		
+		
+//		if(s.left instanceof ComplexFunction && s.right instanceof ComplexFunction) {
+//			return s.Op + "(" + toString((ComplexFunction) s.left) + "," + toString((ComplexFunction) s.right) + ")";
+//		}
+//		else if(s.left instanceof ComplexFunction) { // we need to add right = NULL case
+//			return s.Op+"("+toString((ComplexFunction) s.left)+","+s.right.toString() + ")";
+//		}
+//		else if(s.right instanceof ComplexFunction) {
+//			return s.Op +"("+ s.left.toString() +","+ toString((ComplexFunction) s.right) +")";
+//		}
+//		return s.Op + "(" + s.left.toString() + " , " + s.right.toString() + ")";
 	}
 	@Override
 	public function copy() {

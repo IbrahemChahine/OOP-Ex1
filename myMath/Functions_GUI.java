@@ -48,7 +48,6 @@ public class Functions_GUI implements functions {
 		Iterator<function> itr = this.iterator();
 		boolean answer = false;
 		while(itr.hasNext() && !answer) {
-			
 			function current = itr.next();
 			if(current==arg0) {return true;} //in case they point at the same object
 			
@@ -65,8 +64,9 @@ public class Functions_GUI implements functions {
 			}
 			else {
 				ComplexFunction temp = (ComplexFunction) current;
-				System.out.println("Now comparing with " + temp.toString());
-				if(temp.toString().contentEquals(arg0.toString())) {answer=true;}
+				System.out.println("Now comparing with " + temp.toString(temp));
+				ComplexFunction compare = (ComplexFunction) arg0;
+				if(temp.toString(temp).contentEquals(compare.toString(compare))) {answer=true;}
 			}
 			
 //			System.out.println("Now comparing with " + temp.toString());
@@ -169,7 +169,7 @@ public class Functions_GUI implements functions {
 				
 				if(line.contains(",")) {
 					ComplexFunction newCF = new ComplexFunction();
-					newCF.initFromString(line);
+					newCF = (ComplexFunction) newCF.initFromString(line);
 					this.add(newCF);
 				}
 				else { //this line is Polynom or Monom. We will make it a polynom
