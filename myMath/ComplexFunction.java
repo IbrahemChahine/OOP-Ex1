@@ -8,9 +8,9 @@ public class ComplexFunction implements complex_function {
 	/**
 	 * 
 	 */
-	private function left;
-	private function right;
-	private Operation Op;
+	public function left;
+	public function right;
+	public Operation Op;
 
 	public ComplexFunction() {
 		this.left = new Polynom();
@@ -45,11 +45,18 @@ public class ComplexFunction implements complex_function {
 	 */
 	@Override
 	public void plus(function f1) {
+		boolean flag = false;
+		if(this==f1) {flag=true;}
 		ComplexFunction helper = new ComplexFunction();
 		if(this instanceof ComplexFunction) {
 			helper= (ComplexFunction)this.copy();
 			this.left = helper;
-			this.right = f1;
+			if(flag) { //if you add something to itself this code is needed, or else it will create an infinit loop
+				ComplexFunction helper2 = new ComplexFunction();
+				helper2 = (ComplexFunction)helper.copy();
+				this.right = helper2;
+			}
+			else{this.right = f1;}
 			this.Op = Operation.Plus;
 		}
 		else {
@@ -61,11 +68,20 @@ public class ComplexFunction implements complex_function {
 	}
 	@Override
 	public void mul(function f1) {
+		boolean flag = false;
+		if(this==f1) {flag=true;}
 		ComplexFunction helper = new ComplexFunction();
 		if(this instanceof ComplexFunction) {
 			helper= (ComplexFunction)this.copy();
 			this.left = helper;
-			this.right = f1;
+			helper= (ComplexFunction)this.copy();
+			this.left = helper;
+			if(flag) { //if you add something to itself this code is needed, or else it will create an infinit loop
+				ComplexFunction helper2 = new ComplexFunction();
+				helper2 = (ComplexFunction)helper.copy();
+				this.right = helper2;
+			}
+			else{this.right = f1;}
 			this.Op = Operation.Times;
 		}
 		else {
@@ -77,11 +93,20 @@ public class ComplexFunction implements complex_function {
 	}
 	@Override
 	public void div(function f1) {
+		boolean flag = false;
+		if(this==f1) {flag=true;}
 		ComplexFunction helper = new ComplexFunction();
 		if(this instanceof ComplexFunction) {
 			helper= (ComplexFunction)this.copy();
 			this.left = helper;
-			this.right = f1;
+			helper= (ComplexFunction)this.copy();
+			this.left = helper;
+			if(flag) { //if you add something to itself this code is needed, or else it will create an infinit loop
+				ComplexFunction helper2 = new ComplexFunction();
+				helper2 = (ComplexFunction)helper.copy();
+				this.right = helper2;
+			}
+			else{this.right = f1;}
 			this.Op = Operation.Divid;
 		}
 		else {
@@ -93,11 +118,18 @@ public class ComplexFunction implements complex_function {
 	}
 	@Override
 	public void max(function f1) {
+		boolean flag = false;
+		if(this==f1) {flag=true;}
 		ComplexFunction helper = new ComplexFunction();
 		if(this instanceof ComplexFunction) {
 			helper= (ComplexFunction)this.copy();
 			this.left = helper;
-			this.right = f1;
+			if(flag) { //if you add something to itself this code is needed, or else it will create an infinit loop
+				ComplexFunction helper2 = new ComplexFunction();
+				helper2 = (ComplexFunction)helper.copy();
+				this.right = helper2;
+			}
+			else{this.right = f1;}
 			this.Op = Operation.Max;
 		}
 		else {
@@ -109,11 +141,18 @@ public class ComplexFunction implements complex_function {
 	}
 	@Override
 	public void min(function f1) {
+		boolean flag = false;
+		if(this==f1) {flag=true;}
 		ComplexFunction helper = new ComplexFunction();
 		if(this instanceof ComplexFunction) {
 			helper= (ComplexFunction)this.copy();
 			this.left = helper;
-			this.right = f1;
+			if(flag) { //if you add something to itself this code is needed, or else it will create an infinit loop
+				ComplexFunction helper2 = new ComplexFunction();
+				helper2 = (ComplexFunction)helper.copy();
+				this.right = helper2;
+			}
+			else{this.right = f1;}
 			this.Op = Operation.Min;
 		}
 		else {
@@ -125,11 +164,18 @@ public class ComplexFunction implements complex_function {
 	}
 	@Override
 	public void comp(function f1) {
+		boolean flag = false;
+		if(this==f1) {flag=true;}
 		ComplexFunction helper = new ComplexFunction();
 		if(this instanceof ComplexFunction) {
 			helper= (ComplexFunction)this.copy();
 			this.left = helper;
-			this.right = f1;
+			if(flag) { //if you add something to itself this code is needed, or else it will create an infinit loop
+				ComplexFunction helper2 = new ComplexFunction();
+				helper2 = (ComplexFunction)helper.copy();
+				this.right = helper2;
+			}
+			else{this.right = f1;}
 			this.Op = Operation.Comp;
 		}
 		else {
@@ -330,26 +376,30 @@ public class ComplexFunction implements complex_function {
 		return this.Op + "(" + left + "," + right + ")";
 	}*/
 	//new, not on github.
+	
+	@Override
 	public String toString() {
-		return toString(this);
+		return toString2(this);
 	}
-	public String toString(ComplexFunction s) {
-		if(s.left instanceof ComplexFunction && s.right instanceof ComplexFunction) {
-			return s.Op + "(" + toString((ComplexFunction) s.left) + "," + toString((ComplexFunction) s.right) + ")";
-		}
-		else if(s.left instanceof ComplexFunction) { // we need to add right = NULL case
-			return s.Op+"("+toString((ComplexFunction) s.left)+","+s.right.toString() + ")";
-		}
-		else if(s.right instanceof ComplexFunction) {
-			return s.Op +"("+ s.left.toString() +","+ toString((ComplexFunction) s.right) +")";
-		}
-		return s.Op + "(" + s.left.toString() + " , " + s.right.toString() + ")";
-		/*
+	public String toString2(ComplexFunction s) {
+//		if(s.left instanceof ComplexFunction && s.right instanceof ComplexFunction) {
+//			return s.Op + "(" + toString((ComplexFunction) s.left) + "," + toString((ComplexFunction) s.right) + ")";
+//		}
+//		else if(s.left instanceof ComplexFunction) { // we need to add right = NULL case
+//			return s.Op+"("+toString((ComplexFunction) s.left)+","+s.right.toString() + ")";
+//		}
+//		else if(s.right instanceof ComplexFunction) {
+//			return s.Op +"("+ s.left.toString() +","+ toString((ComplexFunction) s.right) +")";
+//		}
+//		return s.Op + "(" + s.left.toString() + " , " + s.right.toString() + ")";
+		
 		String left;
 		String right;
 		
 		if(s.left instanceof ComplexFunction) {
-			left = toString((ComplexFunction) s.left);
+			ComplexFunction temp = (ComplexFunction) s.left;
+			left = temp.toString();
+//			left = toString2((ComplexFunction) s.left);
 		}
 		else if(s.left instanceof Polynom) {
 			left = ((Polynom) s.left).toString();
@@ -360,7 +410,9 @@ public class ComplexFunction implements complex_function {
 		
 		if(s.right==null) {right="";}
 		else if(s.right instanceof ComplexFunction) {
-			right = toString((ComplexFunction) s.right);
+			ComplexFunction temp2 = (ComplexFunction) s.right;
+			right = temp2.toString();
+//			right = toString2((ComplexFunction) s.right);
 		}
 		else if(s.right instanceof Polynom) {
 			right = ((Polynom) s.right).toString();
@@ -371,7 +423,7 @@ public class ComplexFunction implements complex_function {
 		
 		return s.Op + "(" + left + "," + right + ")";
 		
-		 */
+		 
 	}
 	@Override
 	public function copy() {

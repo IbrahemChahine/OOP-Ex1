@@ -78,9 +78,8 @@ public class Functions_GUI implements functions {
 			}
 			else {
 				ComplexFunction temp = (ComplexFunction) current;
-				System.out.println("Now comparing with " + temp.toString(temp));
-				ComplexFunction compare = (ComplexFunction) arg0;
-				if(temp.toString(temp).contentEquals(compare.toString(compare))) {answer=true;}
+				System.out.println("Now comparing with " + temp.toString());
+				if(temp.toString().contentEquals(arg0.toString())) {answer=true;}
 			}
 			
 //			System.out.println("Now comparing with " + temp.toString());
@@ -250,20 +249,19 @@ public class Functions_GUI implements functions {
 			x0 =rx.get_min();
 			x1 = x0+X_step;
 		}*/
-		int n = resolution;
 		
 		StdDraw.setCanvasSize(width, height);
 		
 		
 		int size = this.group.size();
-		double[] x = new double[n+1];
-		double[][] yy = new double[size][n+1];
-		double x_step = (rx.get_max()-rx.get_min())/n;
+		double[] xArray = new double[resolution+1];
+		double[][] yArray = new double[size][resolution+1];
+		double x_step = (rx.get_max()-rx.get_min())/resolution;
 		double x0 = rx.get_min();
-		for (int i=0; i<=n; i++) {
-			x[i] = x0;
+		for (int i=0; i<=resolution; i++) {
+			xArray[i] = x0;
 			for(int a=0;a<size;a++) {
-				yy[a][i] = this.group.get(a).f(x[i]);
+				yArray[a][i] = this.group.get(a).f(xArray[i]);
 			}
 			x0+=x_step;
 		}
@@ -278,11 +276,11 @@ public class Functions_GUI implements functions {
 			int c = a%Colors.length;
 			StdDraw.setPenColor(Colors[c]);// set color.
 			System.out.println(a+") "+Colors[a]+"f(x)= "+this.group.get(a).toString());
-			for (int i = 0; i < n; i++) {
-				StdDraw.line(x[i], yy[a][i], x[i+1], yy[a][i+1]);
+			for (int i = 0; i < resolution; i++) {
+				StdDraw.line(xArray[i], yArray[a][i], xArray[i+1], yArray[a][i+1]);
 			}
 		}	
-	}
+	}//end drawFunctions
 	@Override
 	public void drawFunctions(String json_file) {
 		 JSONObject jsonObject;

@@ -71,13 +71,19 @@ public class Polynom implements Polynom_able{
 	}
 	*/
 	public Polynom(String s) {
-		if(s.contains(" ")) {
-			if(!s.contains("+") || !s.contains("-") ) {
-				throw new RuntimeException("String '" + s + "' that was sent to Polynom from Sring constructor contains spaces without +,-");
-
-			}
-		}
-		s = s.replaceAll(" ", ""); //remove spaces
+		if(s.contains("- ") || s.contains("+ ") || s.contains("^ ")) {throw new RuntimeException("String sent to init a polynom contains '+ ' or '- ' or '^ ' and thus is illegal. The string was - " + s);}
+		while(s.charAt(0)==' ') {s = s.substring(1, s.length());} //get rid of all spaces at the beginning
+		while(s.charAt(s.length()-1)==' ') {s=s.substring(0,s.length()-1);}//get rid of spaces at the end
+		if(s.contains(" ")) {//if there are more spaces in the string, check it is OK.
+			String temp = s;
+			while(temp.contains(" ")) {
+				temp = temp.substring(temp.indexOf(" ")+1, temp.length());
+				while(temp.charAt(0)==' ') {temp = temp.substring(1, temp.length());} //advance until 1st character isn't space
+				if(temp.charAt(0)!='+' && temp.charAt(0)!='-') {throw new RuntimeException("String '" + s + "' that was sent to Polynom from Sring constructor contains illegal instances of spaces (i.e. without +,-)");}
+			} //end while
+		}//end if
+		
+		s = s.replaceAll(" ", ""); //If you got here, the string is OK. Now just remove the spaces.
 		if (s.equals("") || s.equals("EmptyPolynom")) {return;}		
 		//empty string or copying from an empty polynom - the polynom will be empty.
 
