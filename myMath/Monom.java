@@ -61,7 +61,7 @@ public class Monom implements function{
 	 */
 	public Monom(String s) {
 		s = s.replaceAll(" ", ""); //remove spaces
-		if(s.isBlank()) {
+		if(s.isEmpty()) {
 			System.err.println("Entered string is empty. Monom will be created as 0x^0.");
 			this.set_coefficient(0);
 			this.set_power(0);

@@ -1,14 +1,28 @@
 package myMath;
+import java.awt.Color;
+
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 public class Functions_GUI implements functions {
 	public ArrayList<function> group = new ArrayList<function>();
-	
+	public static Color[] Colors = {Color.blue, Color.cyan, Color.MAGENTA, Color.ORANGE, 
+			Color.red, Color.GREEN, Color.PINK};
+    private static int Width;
+	private static int Height;
+    private static int Resolution; 
+    private static Range  Range_X;
+    private static Range Range_Y;
 	@Override
 	public boolean add(function arg0) {
 		//		if(arg0 instanceof Polynom) {
@@ -188,13 +202,31 @@ public class Functions_GUI implements functions {
 
 	@Override
 	public void saveToFile(String file) throws IOException {
-		// TODO Auto-generated method stub
-
+		   FileWriter fr = null;
+	       BufferedWriter br = null;
+	       //String dataWithNewLine=data+System.getProperty("line.separator");
+	       try{
+	           fr = new FileWriter(file);
+	           br = new BufferedWriter(fr);
+	           for(int i = this.group.size()-1; i>0; i--){
+	               br.write(this.group.get(i).toString());
+	               br.newLine();
+	           }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }finally{
+	            try {
+	                br.close();
+	                fr.close();
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
 	}
 
 	@Override
 	public void drawFunctions(int width, int height, Range rx, Range ry, int resolution) {
-		StdDraw.setCanvasSize(width,height);
+		/*StdDraw.setCanvasSize(width,height);
 		StdDraw.setXscale(rx.get_min(),rx.get_max());
 		StdDraw.setYscale(ry.get_min(),ry.get_max());
 		StdDraw.line(rx.get_min(),0,rx.get_max(),0);
@@ -204,9 +236,10 @@ public class Functions_GUI implements functions {
 		double x1 = x0+X_step;
 		double y0;
 		double y1;
-		StdDraw.setPenRadius(0.005);
+		StdDraw.setPenRadius(0.007);
 		for(int j=0; j<this.group.size(); j++) {
 			function currentFunction = this.group.get(j);
+			StdDraw.setPenColor();
 			for(int i=0; i<resolution;i++) {
 				y0 = currentFunction.f(x0);
 				y1 = currentFunction.f(x1);
@@ -216,13 +249,85 @@ public class Functions_GUI implements functions {
 			}
 			x0 =rx.get_min();
 			x1 = x0+X_step;
+		}*/
+		int n = resolution;
+		
+		StdDraw.setCanvasSize(width, height);
+		
+		
+		int size = this.group.size();
+		double[] x = new double[n+1];
+		double[][] yy = new double[size][n+1];
+		double x_step = (rx.get_max()-rx.get_min())/n;
+		double x0 = rx.get_min();
+		for (int i=0; i<=n; i++) {
+			x[i] = x0;
+			for(int a=0;a<size;a++) {
+				yy[a][i] = this.group.get(a).f(x[i]);
+			}
+			x0+=x_step;
 		}
+		
+		StdDraw.setXscale(rx.get_min(), rx.get_max());
+		StdDraw.setYscale(ry.get_min(), ry.get_max());
+		StdDraw.line(rx.get_min(),0,rx.get_max(),0);
+		StdDraw.line(0,ry.get_min(),0,ry.get_max());
+		StdDraw.setPenRadius(0.007);
+		// plot the approximation to the function
+		for(int a=0;a<size;a++) {
+			int c = a%Colors.length;
+			StdDraw.setPenColor(Colors[c]);// set color.
+			System.out.println(a+") "+Colors[a]+"f(x)= "+this.group.get(a).toString());
+			for (int i = 0; i < n; i++) {
+				StdDraw.line(x[i], yy[a][i], x[i+1], yy[a][i+1]);
+			}
+		}	
 	}
-
 	@Override
 	public void drawFunctions(String json_file) {
-		// TODO Auto-generated method stub
-
+		 JSONObject jsonObject;
+		try {
+			 jsonObject = (JSONObject) readJsonSimpleDemo(json_file);
+			 Width = Long.valueOf((long) jsonObject.get("Width")).intValue();    
+		     Height = Long.valueOf((long)jsonObject.get("Height")).intValue();  
+		     Resolution = Long.valueOf((long)jsonObject.get("Resolution")).intValue();  
+		     String rangex = String.valueOf(jsonObject.get("Range_X"));   
+		     rangex.substring(1,rangex.length()-1);
+		     Range rx = new Range(0,0); 
+		     
+		     for(int i=0;i<rangex.length();i++) {
+		       	if(rangex.charAt(i) == ',') {
+		       		rx = new Range((int)Integer.parseInt(rangex.substring(1,rangex.indexOf(','))),(int)Integer.parseInt(rangex.substring(rangex.indexOf(',')+1,rangex.length()-1)));
+		       	}
+		     }
+		     String rangey = String.valueOf(jsonObject.get("Range_Y")); 
+		     Range ry= new Range(0,0);
+		     for(int i=0;i<rangey.length();i++) {
+		       	if(rangex.charAt(i) == ',') {
+		       		ry = new Range((int) Integer.parseInt(rangex.substring(1,rangex.indexOf(','))),(int) Integer.parseInt(rangex.substring(rangex.indexOf(',')+1,rangex.length()-1)));
+		        }
+		     }
+		     drawFunctions(Width,Height,rx,ry,Resolution);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	//
+	public static Object readJsonSimpleDemo(String filename) throws Exception {
+	    FileReader reader = new FileReader(filename);
+	    JSONParser jsonParser = new JSONParser();
+	    return jsonParser.parse(reader);
+	}
+	/*
+	 {
+	"Width":400,
+	"Height":400,
+	"Resolution":1500,
+	"Range_X":[-10,10],
+	"Range_Y":[-10,10]
+	}
+	 */
+	
 
 }

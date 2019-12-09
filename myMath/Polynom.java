@@ -71,6 +71,12 @@ public class Polynom implements Polynom_able{
 	}
 	*/
 	public Polynom(String s) {
+		if(s.contains(" ")) {
+			if(!s.contains("+") || !s.contains("-") ) {
+				throw new RuntimeException("String '" + s + "' that was sent to Polynom from Sring constructor contains spaces without +,-");
+
+			}
+		}
 		s = s.replaceAll(" ", ""); //remove spaces
 		if (s.equals("") || s.equals("EmptyPolynom")) {return;}		
 		//empty string or copying from an empty polynom - the polynom will be empty.

@@ -302,7 +302,7 @@ public class ComplexFunction implements complex_function {
 		}
 		return helper;
 	}
-	public String toSrting() {
+	/*public String toSrting() {
 		String left;
 		String right;
 		
@@ -328,11 +328,23 @@ public class ComplexFunction implements complex_function {
 		}
 		
 		return this.Op + "(" + left + "," + right + ")";
-//		return toString(this);
-		
-	}
+	}*/
 	//new, not on github.
+	public String toString() {
+		return toString(this);
+	}
 	public String toString(ComplexFunction s) {
+		if(s.left instanceof ComplexFunction && s.right instanceof ComplexFunction) {
+			return s.Op + "(" + toString((ComplexFunction) s.left) + "," + toString((ComplexFunction) s.right) + ")";
+		}
+		else if(s.left instanceof ComplexFunction) { // we need to add right = NULL case
+			return s.Op+"("+toString((ComplexFunction) s.left)+","+s.right.toString() + ")";
+		}
+		else if(s.right instanceof ComplexFunction) {
+			return s.Op +"("+ s.left.toString() +","+ toString((ComplexFunction) s.right) +")";
+		}
+		return s.Op + "(" + s.left.toString() + " , " + s.right.toString() + ")";
+		/*
 		String left;
 		String right;
 		
@@ -359,21 +371,11 @@ public class ComplexFunction implements complex_function {
 		
 		return s.Op + "(" + left + "," + right + ")";
 		
-		
-//		if(s.left instanceof ComplexFunction && s.right instanceof ComplexFunction) {
-//			return s.Op + "(" + toString((ComplexFunction) s.left) + "," + toString((ComplexFunction) s.right) + ")";
-//		}
-//		else if(s.left instanceof ComplexFunction) { // we need to add right = NULL case
-//			return s.Op+"("+toString((ComplexFunction) s.left)+","+s.right.toString() + ")";
-//		}
-//		else if(s.right instanceof ComplexFunction) {
-//			return s.Op +"("+ s.left.toString() +","+ toString((ComplexFunction) s.right) +")";
-//		}
-//		return s.Op + "(" + s.left.toString() + " , " + s.right.toString() + ")";
+		 */
 	}
 	@Override
 	public function copy() {
-		String s = this.toSrting();
+		String s = this.toString();
 		function f = initFromString(s);
 		return f;
 	}
