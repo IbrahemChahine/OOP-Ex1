@@ -65,6 +65,9 @@ saveToFIle(String file) - This method saves all the functions in a file .
 drawFunctons(int width,int height,Range rx,Range ry, int resolution) - This method draws all the the function with the given values.
 drawFunction(String json_file) -  This method draws all the the function with the given values in a json file.
 ```
+
+![](https://github.com/IbrahemChahine/OOP-Ex1/issues/1#issue-535875965)
+
 **- In the Complex_Function class**
 ```
 Default constructor  initialize this.left to the zero polynom, this.right with null and this.Op = none.
@@ -79,7 +82,7 @@ comp(function f1) -comp = f(f1).
 f(double x) - returns the value of f(x).
 initFromString(String s) - creates a complex function from string.
 toString() -  returns a string that represents a complex function.
-
+equals(Object obj) - check if this and obj are eqaul.
 ```
 
 **- Monom_comperator** class - A class that compares between **Monoms** - will return 0 if they are equal.
