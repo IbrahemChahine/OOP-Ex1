@@ -11,12 +11,20 @@ public class ComplexFunction implements complex_function {
 	public function left;
 	public function right;
 	public Operation Op;
-
+	/*
+	 * A default constructor.
+	 */
 	public ComplexFunction() {
 		this.left = new Polynom();
 		this.right = null;
 		this.Op = Operation.None;
 	}
+	/*
+	 * A constructor that builds a complex function with String as the Operation and a peer of functions for the left and right.
+	 * @param string - A string represented as a Operation. 
+	 * @param p1 - A function for the left side of this complex function, this function can be ComplexFunction or Polynom or Monom.
+	 * @param p2 - A function for the left side of this complex function, this function can be ComplexFunction or Polynom or Monom or null.
+	 */
 	public ComplexFunction(String string, function p1, function p2) {
 		this.left = p1;
 		this.right = p2;
@@ -30,18 +38,31 @@ public class ComplexFunction implements complex_function {
 
 
 	}
+	/*
+	 * A constructor that builds a complex function with the Operation and a peer of functions for the left and right.
+	 * @param OP - The Operation. 
+	 * @param p1 - A function for the left side of this complex function, this function can be ComplexFunction or Polynom or Monom.
+	 * @param p2 - A function for the left side of this complex function, this function can be ComplexFunction or Polynom or Monom or null.
+	 */
 	public ComplexFunction(Operation OP, function p1, function p2) {
 		this.left = p1;
 		this.right = p2;
 		this.Op = OP;
 	}
-
+	/*
+	 * A constructor that builds a complex function  with the left .
+	 * @param left - A function for the left side of this complex function, this function can be ComplexFunction or Polynom or Monom.
+	 * The Operation of this complex function is None.
+	 */
 	public ComplexFunction(function left) {
 		this.left = left;
 		this.Op = Operation.None;
 	}
 	/** Add to this complex_function the f1 complex_function 
 	 * @param f1 the complex_function which will be added to this complex_function.
+	 * @param flag - This parameter helps us to know if the this and f1 are eqaul.
+	 * @param helper - helper is a copy of this ComplexFunction, we use it if this is a ComplexFunction.
+	 * @param helperPolynom - helper is a copy of this Polynom, we use it if this is a Polynom or Monom.
 	 */
 	@Override
 	public void plus(function f1) {
@@ -66,6 +87,9 @@ public class ComplexFunction implements complex_function {
 			this.Op = Operation.Plus;
 		}
 	}
+	/** multiply this complex_function and the given f1 complex_function 
+	 * @param f1 the complex_function which will be multiplyed with this complex_function.
+	 */
 	@Override
 	public void mul(function f1) {
 		boolean flag = false;
@@ -91,6 +115,12 @@ public class ComplexFunction implements complex_function {
 			this.Op = Operation.Times;
 		}
 	}
+	/** divide this complex_function and the given f1 complex_function 
+	 * @param f1 the complex_function which will be divided with this complex_function.
+	 * @param flag - This parameter helps us to know if the this and f1 are eqaul.
+	 * @param helper - helper is a copy of this ComplexFunction, we use it if this is a ComplexFunction.
+	 * @param helperPolynom - helper is a copy of this Polynom, we use it if this is a Polynom or Monom.
+	 */
 	@Override
 	public void div(function f1) {
 		boolean flag = false;
@@ -116,6 +146,12 @@ public class ComplexFunction implements complex_function {
 			this.Op = Operation.Divid;
 		}
 	}
+	/** max between this complex_function and the given f1 complex_function 
+	 * @param f1 the complex_function which will be compared with this complex_function. to compute  max  
+	 * @param flag - This parameter helps us to know if the this and f1 are eqaul.
+	 * @param helper - helper is a copy of this ComplexFunction, we use it if this is a ComplexFunction.
+	 * @param helperPolynom - helper is a copy of this Polynom, we use it if this is a Polynom or Monom.
+	 */
 	@Override
 	public void max(function f1) {
 		boolean flag = false;
@@ -138,7 +174,13 @@ public class ComplexFunction implements complex_function {
 			this.right = f1;
 			this.Op = Operation.Max;
 		}
-	}
+	}	
+	/** min between this complex_function and the given f1 complex_function 
+	 * @param f1 the complex_function which will be compared with this complex_function. to compute  min  .
+	 * @param flag - This parameter helps us to know if the this and f1 are eqaul.
+	 * @param helper - helper is a copy of this ComplexFunction, we use it if this is a ComplexFunction.
+	 * @param helperPolynom - helper is a copy of this Polynom, we use it if this is a Polynom or Monom.
+	 */
 	@Override
 	public void min(function f1) {
 		boolean flag = false;
@@ -162,6 +204,13 @@ public class ComplexFunction implements complex_function {
 			this.Op = Operation.Min;
 		}
 	}
+	/** min between this complex_function and the given f1 complex_function 
+	 * This method wrap the f1 complex_function with this function: this.f(f1(x))
+	 * @param f1 complex function.
+	 * @param flag - This parameter helps us to know if the this and f1 are eqaul.
+	 * @param helper - helper is a copy of this ComplexFunction, we use it if this is a ComplexFunction.
+	 * @param helperPolynom - helper is a copy of this Polynom, we use it if this is a Polynom or Monom.
+	 */
 	@Override
 	public void comp(function f1) {
 		boolean flag = false;
@@ -185,18 +234,31 @@ public class ComplexFunction implements complex_function {
 			this.Op = Operation.Comp;
 		}
 	}
+	/** returns the left side of the complex function - this side should always exists (should NOT be null).
+	 * @return a function representing the left side of this complex funcation
+	 */
 	@Override
 	public function left() {
 		return this.left;
 	}
+	/** returns the right side of the complex function - this side might not exists (aka equals null).
+	 * @return a function representing the left side of this complex funcation
+	 */
 	@Override
 	public function right() {
 		return this.right;
 	}
+	/**
+	 * The complex_function oparation: plus, mul, div, max, min, comp
+	 * @return this.Op - the OPeration of this.
+	 */
 	@Override
 	public Operation getOp() {
 		return this.Op;
 	}
+	/*
+	 * This method computes the value of the complex function with value x.
+	 */
 	@Override
 	public double f(double x) {
 		if(this.Op.name()=="None" ){
@@ -244,6 +306,9 @@ public class ComplexFunction implements complex_function {
 		}
 		return 0; //general return, will not be used.
 	}
+	/*
+	 * this method set the Operation with a string.
+	 */
 	public Operation setOp(String s) {
 		String string = s.toLowerCase();
 		Operation answer = null;
@@ -297,7 +362,20 @@ public class ComplexFunction implements complex_function {
 
 	}
 
-
+	/*
+	 * This method returns a function from a string represented an a function.
+	 * @param s - A string that represents a function.
+	 * @param helper - the function that the method will return.
+	 * @param LocationOfFirstBracket - the location of the First Bracket
+	 * @param operatorString - A string that represents the Operation of the function.
+	 * @param NumOfBrackets - the number of brackets found in the string.
+	 * @param mainCommaIndex - the index of the main comma in the function, Example = say p and q is functions then 
+	 * consider { "plus(p,q)"_} we get that the main comma index is 9.
+	 * @param Left_Flag - this boolean value is true is the left function in the string is a ComplexFunction.
+	 * @param leftSidePolynom - if Left_Flag is false then left is a polynom so this parameter is the left.
+	 * @param rightSideCF - if the right side is ComplexFunction then this parameter is the right.
+	 * @param rightSidePolynom - if the right side is Polynom then this parameter is the right.
+	 */
 	@Override
 	public function initFromString(String s) {
 
@@ -379,7 +457,9 @@ public class ComplexFunction implements complex_function {
 		return this.Op + "(" + left + "," + right + ")";
 	}*/
 	//new, not on github.
-	
+	/*
+	 * @returns a string that represent this ComplexFunction.
+	 */
 	@Override
 	public String toString() {
 		return toString2(this);
@@ -428,6 +508,9 @@ public class ComplexFunction implements complex_function {
 		
 		 
 	}
+	/*
+	 * @returns a copy of this complexfunction.
+	 */
 	@Override
 	public function copy() {
 		String s = this.toString();

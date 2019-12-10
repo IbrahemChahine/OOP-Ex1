@@ -170,7 +170,13 @@ public class Functions_GUI implements functions {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	/*
+	 * This method build's a new Collection of function with string represented as a function
+	 * @param file  The given file that contains strings of functions.
+	 * @param line helps us to build the functions.
+	 * @param fileReaderr a class in java to read files.
+	 * @param bufferedReader gives us the lines in the files.
+ 	 */
 	@Override
 	public void initFromFile(String file) throws IOException {
 		String line = null;
@@ -198,7 +204,11 @@ public class Functions_GUI implements functions {
 		catch(IOException ex) {throw new RuntimeException("Error reading file " + file + ". Cause described as " + ex.getMessage());}
 
 	}
-
+	/**
+	 * This function save to file a the collection of the function.
+	 * @param fr the file reader.
+	 * @param br the BufferedWriter.
+	 */
 	@Override
 	public void saveToFile(String file) throws IOException {
 		FileWriter fr = null;
@@ -222,34 +232,17 @@ public class Functions_GUI implements functions {
 			}
 		}
 	}
-
+	/*
+	 * Draws all the functions in the collection in a GUI window using the
+	 * given parameters for the GUI window and the range & resolution
+	 * @param width - the width of the window - in pixels
+	 * @param height - the height of the window - in pixels
+	 * @param rx - the range of the horizontal axis
+	 * @param ry - the range of the vertical axis
+	 * @param resolution - the number of samples with in rx: the X_step = rx/resulution
+	 */
 	@Override
 	public void drawFunctions(int width, int height, Range rx, Range ry, int resolution) {
-		/*StdDraw.setCanvasSize(width,height);
-		StdDraw.setXscale(rx.get_min(),rx.get_max());
-		StdDraw.setYscale(ry.get_min(),ry.get_max());
-		StdDraw.line(rx.get_min(),0,rx.get_max(),0);
-		StdDraw.line(0,ry.get_min(),0,ry.get_max());
-		double X_step = ((Math.abs(rx.get_max()) + Math.abs(rx.get_min()))/resolution);
-		double x0 =rx.get_min();
-		double x1 = x0+X_step;
-		double y0;
-		double y1;
-		StdDraw.setPenRadius(0.007);
-		for(int j=0; j<this.group.size(); j++) {
-			function currentFunction = this.group.get(j);
-			StdDraw.setPenColor();
-			for(int i=0; i<resolution;i++) {
-				y0 = currentFunction.f(x0);
-				y1 = currentFunction.f(x1);
-				StdDraw.line(x0, y0, x1, y1);
-				x0 = x1+X_step;
-				x1 = (x0+X_step);
-			}
-			x0 =rx.get_min();
-			x1 = x0+X_step;
-		}*/
-
 		StdDraw.setCanvasSize(width, height);
 
 
@@ -281,6 +274,11 @@ public class Functions_GUI implements functions {
 			}
 		}	
 	}//end drawFunctions
+	 /**
+	 * Draws all the functions in the collection in a GUI window using the given JSON file
+	 * @param json_file - the file with all the parameters for the GUI window. 
+	 * Note: is the file id not readable or in wrong format should use default values. 
+	*/
 	@Override
 	public void drawFunctions(String json_file) {
 		String rangex;
