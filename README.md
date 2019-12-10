@@ -82,7 +82,7 @@ comp(function f1) -comp = f(f1).
 f(double x) - returns the value of f(x).
 initFromString(String s) - creates a complex function from string.
 toString() -  returns a string that represents a complex function.
-
+equals(Object obj) - check if this and obj are eqaul.
 ```
 
 **- Monom_comperator** class - A class that compares between **Monoms** - will return 0 if they are equal.
