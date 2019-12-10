@@ -199,8 +199,10 @@ public class ComplexFunction implements complex_function {
 	}
 	@Override
 	public double f(double x) {
-
-		if(this.Op.name()=="None") return 0;
+		if(this.Op.name()=="None" ){
+			if(this.right!=null){throw new RuntimeException("Was asked to calculate f(x) for a ComplexFunction that has None as Operator and has both a Left and Right. Illegal!");}
+			else {return this.left.f(x);}
+		}
 		if(this.Op.name()=="Error") throw new RuntimeException("Used f function on ComplexFunction that has Error as it's OP");
 
 		double LeftValue = 0;
@@ -223,6 +225,7 @@ public class ComplexFunction implements complex_function {
 		case Times:
 			return (double) LeftValue * RightValue;
 		case Divid:
+			if(RightValue==0) {throw new RuntimeException("Was asked to divide by 0");}
 			return (double) LeftValue / RightValue;
 		case Max:
 			return LeftValue>RightValue? LeftValue:RightValue;

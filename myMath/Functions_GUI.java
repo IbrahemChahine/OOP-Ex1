@@ -18,11 +18,11 @@ public class Functions_GUI implements functions {
 	public ArrayList<function> group = new ArrayList<function>();
 	public static Color[] Colors = {Color.blue, Color.cyan, Color.MAGENTA, Color.ORANGE, 
 			Color.red, Color.GREEN, Color.PINK};
-    private static int Width;
-	private static int Height;
-    private static int Resolution; 
-    private static Range  Range_X;
-    private static Range Range_Y;
+//	private static int Width;
+//	private static int Height;
+//	private static int Resolution; 
+//	private static Range  Range_X;
+//	private static Range Range_Y;
 	@Override
 	public boolean add(function arg0) {
 		//		if(arg0 instanceof Polynom) {
@@ -64,7 +64,7 @@ public class Functions_GUI implements functions {
 		while(itr.hasNext() && !answer) {
 			function current = itr.next();
 			if(current==arg0) {return true;} //in case they point at the same object
-			
+
 			//Cast the current function object
 			if(current instanceof Monom) {
 				Monom temp = (Monom) current;
@@ -81,10 +81,10 @@ public class Functions_GUI implements functions {
 				System.out.println("Now comparing with " + temp.toString());
 				if(temp.toString().contentEquals(arg0.toString())) {answer=true;}
 			}
-			
-//			System.out.println("Now comparing with " + temp.toString());
-			
-//			if(temp.toString().contentEquals(arg0.toString())) {answer=true;}
+
+			//			System.out.println("Now comparing with " + temp.toString());
+
+			//			if(temp.toString().contentEquals(arg0.toString())) {answer=true;}
 		}
 		return answer;
 	}
@@ -179,7 +179,7 @@ public class Functions_GUI implements functions {
 			BufferedReader bufferedReader = new BufferedReader(fileReaderr);
 			while((line = bufferedReader.readLine()) != null) {
 				line = line.replaceAll(" ", "");
-				
+
 				if(line.contains(",")) {
 					ComplexFunction newCF = new ComplexFunction();
 					newCF = (ComplexFunction) newCF.initFromString(line);
@@ -201,26 +201,26 @@ public class Functions_GUI implements functions {
 
 	@Override
 	public void saveToFile(String file) throws IOException {
-		   FileWriter fr = null;
-	       BufferedWriter br = null;
-	       //String dataWithNewLine=data+System.getProperty("line.separator");
-	       try{
-	           fr = new FileWriter(file);
-	           br = new BufferedWriter(fr);
-	           for(int i = this.group.size()-1; i>0; i--){
-	               br.write(this.group.get(i).toString());
-	               br.newLine();
-	           }
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }finally{
-	            try {
-	                br.close();
-	                fr.close();
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	            }
-	        }
+		FileWriter fr = null;
+		BufferedWriter br = null;
+		//String dataWithNewLine=data+System.getProperty("line.separator");
+		try{
+			fr = new FileWriter(file);
+			br = new BufferedWriter(fr);
+			for(int i = this.group.size()-1; i>0; i--){
+				br.write(this.group.get(i).toString());
+				br.newLine();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				br.close();
+				fr.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
@@ -249,10 +249,10 @@ public class Functions_GUI implements functions {
 			x0 =rx.get_min();
 			x1 = x0+X_step;
 		}*/
-		
+
 		StdDraw.setCanvasSize(width, height);
-		
-		
+
+
 		int size = this.group.size();
 		double[] xArray = new double[resolution+1];
 		double[][] yArray = new double[size][resolution+1];
@@ -265,7 +265,7 @@ public class Functions_GUI implements functions {
 			}
 			x0+=x_step;
 		}
-		
+
 		StdDraw.setXscale(rx.get_min(), rx.get_max());
 		StdDraw.setYscale(ry.get_min(), ry.get_max());
 		StdDraw.line(rx.get_min(),0,rx.get_max(),0);
@@ -283,39 +283,64 @@ public class Functions_GUI implements functions {
 	}//end drawFunctions
 	@Override
 	public void drawFunctions(String json_file) {
-		 JSONObject jsonObject;
+		String rangex;
+		String rangey;
+		int Width;
+		int Height;
+		int Resolution; 
+		JSONObject jsonObject;
+		try {jsonObject = (JSONObject) readJsonSimpleDemo(json_file);}
+		catch(Exception e) {throw new RuntimeException("Error reading the Json file. Please make sure it exists and that you gave the correct path to it.");}
+
 		try {
-			 jsonObject = (JSONObject) readJsonSimpleDemo(json_file);
-			 Width = Long.valueOf((long) jsonObject.get("Width")).intValue();    
-		     Height = Long.valueOf((long)jsonObject.get("Height")).intValue();  
-		     Resolution = Long.valueOf((long)jsonObject.get("Resolution")).intValue();  
-		     String rangex = String.valueOf(jsonObject.get("Range_X"));   
-		     rangex.substring(1,rangex.length()-1);
-		     Range rx = new Range(0,0); 
-		     
-		     for(int i=0;i<rangex.length();i++) {
-		       	if(rangex.charAt(i) == ',') {
-		       		rx = new Range((int)Integer.parseInt(rangex.substring(1,rangex.indexOf(','))),(int)Integer.parseInt(rangex.substring(rangex.indexOf(',')+1,rangex.length()-1)));
-		       	}
-		     }
-		     String rangey = String.valueOf(jsonObject.get("Range_Y")); 
-		     Range ry= new Range(0,0);
-		     for(int i=0;i<rangey.length();i++) {
-		       	if(rangex.charAt(i) == ',') {
-		       		ry = new Range((int) Integer.parseInt(rangex.substring(1,rangex.indexOf(','))),(int) Integer.parseInt(rangex.substring(rangex.indexOf(',')+1,rangex.length()-1)));
-		        }
-		     }
-		     drawFunctions(Width,Height,rx,ry,Resolution);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Width = Long.valueOf((long) jsonObject.get("Width")).intValue();    
+			Height = Long.valueOf((long)jsonObject.get("Height")).intValue();  
+			Resolution = Long.valueOf((long)jsonObject.get("Resolution")).intValue();
+			rangex = String.valueOf(jsonObject.get("Range_X"));
+			rangey = String.valueOf(jsonObject.get("Range_Y"));
 		}
+		catch(Exception e) {throw new RuntimeException("Invalid or missing values form Json file.");}
+
+		try {
+			rangex.substring(1,rangex.length()-1);
+		}
+		catch(Exception e) {throw new RuntimeException("Range_X value too short, it is illegal");}
+		
+		int commaCounter=0;
+		for(int i=0;i<rangex.length();i++) {
+			if(rangex.charAt(i)==',') {commaCounter++;}
+		}
+		if(commaCounter>1 || commaCounter==0 || rangex.charAt(rangex.length()-1)==',') {throw new RuntimeException("Illegal value given for rangeX");}
+		int commaLocation = rangex.indexOf(",");
+		
+		Range rx = new Range(0,0); 
+		rx = new Range((int)Integer.parseInt(rangex.substring(1,commaLocation)),(int)Integer.parseInt(rangex.substring(commaLocation+1,rangex.length()-1)));
+//		for(int i=0;i<rangex.length();i++) {
+//			if(rangex.charAt(i) == ',') {
+//				rx = new Range((int)Integer.parseInt(rangex.substring(1,rangex.indexOf(','))),(int)Integer.parseInt(rangex.substring(rangex.indexOf(',')+1,rangex.length()-1)));
+//			}
+//		}
+		
+		commaCounter=0;
+		for(int i=0;i<rangey.length();i++) {
+			if(rangey.charAt(i)==',') {commaCounter++;}
+		}
+		if(commaCounter>1 || commaCounter==0 ||rangey.charAt(rangey.length()-1)==',') {throw new RuntimeException("Illegal value given for rangeY");}
+		commaLocation = rangey.indexOf(",");
+		Range ry= new Range(0,0);
+		ry = new Range((int) Integer.parseInt(rangey.substring(1,commaLocation)),(int) Integer.parseInt(rangey.substring(commaLocation+1,rangey.length()-1)));
+//		for(int i=0;i<rangey.length();i++) {
+//			if(rangex.charAt(i) == ',') {
+//				ry = new Range((int) Integer.parseInt(rangex.substring(1,rangex.indexOf(','))),(int) Integer.parseInt(rangex.substring(rangex.indexOf(',')+1,rangex.length()-1)));
+//			}
+//		}
+		drawFunctions(Width,Height,rx,ry,Resolution);
 	}
 	//
 	public static Object readJsonSimpleDemo(String filename) throws Exception {
-	    FileReader reader = new FileReader(filename);
-	    JSONParser jsonParser = new JSONParser();
-	    return jsonParser.parse(reader);
+		FileReader reader = new FileReader(filename);
+		JSONParser jsonParser = new JSONParser();
+		return jsonParser.parse(reader);
 	}
 	/*
 	 {
@@ -326,6 +351,6 @@ public class Functions_GUI implements functions {
 	"Range_Y":[-10,10]
 	}
 	 */
-	
+
 
 }

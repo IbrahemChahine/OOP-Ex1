@@ -56,8 +56,8 @@ public class tester {
 			System.out.println(e.getMessage());
 		}
 		//System.out.println(testFGUI.toString());
-//		testFGUI.drawFunctions(1000, 600, rxx, ryy, 200);
-		testFGUI.drawFunctions("GUI_params.json");
+		testFGUI.drawFunctions(1000, 600, rxx, ryy, 200);
+//		testFGUI.drawFunctions("GUI_params.json");
 		System.out.println("end");
 		
 	}
