@@ -65,6 +65,9 @@ saveToFIle(String file) - This method saves all the functions in a file .
 drawFunctons(int width,int height,Range rx,Range ry, int resolution) - This method draws all the the function with the given values.
 drawFunction(String json_file) -  This method draws all the the function with the given values in a json file.
 ```
+
+![](https://github.com/IbrahemChahine/OOP-Ex1/issues/1#issue-535875965)
+
 **- In the Complex_Function class**
 ```
 Default constructor  initialize this.left to the zero polynom, this.right with null and this.Op = none.
