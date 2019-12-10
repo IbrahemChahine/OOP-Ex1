@@ -10,6 +10,10 @@ import javax.management.RuntimeErrorException;
  *
  */
 public class Monom implements function{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4678829995977516702L;
 	public static final Monom ZERO = new Monom(0,0);
 	public static final Monom MINUS1 = new Monom(-1,0);
 	public static final double EPSILON = 0.0000001;
@@ -42,6 +46,7 @@ public class Monom implements function{
 		if(this.get_power()==0) {return getNewZeroMonom();}
 		return new Monom(this.get_coefficient()*this.get_power(), this.get_power()-1);
 	}
+	@Override
 	public double f(double x) {// returns the value of y for a specific x. 
 		double ans=0;
 		double p = this.get_power();
@@ -218,9 +223,23 @@ public class Monom implements function{
 			return false;
 		}
 	}
+	@SuppressWarnings("unlikely-arg-type")
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Monom) {
+			return this.equals((Monom)obj);
+		}
+		else if(obj instanceof Polynom_able) {
+			return ((Polynom)obj).equals(this);
+		}
+		else {throw new RuntimeException("Was asked if a non Monom Object is equals to a Monom - illegal!");}
+	}
+	
+	
 	/*
 	 * returns a String represented as a monom.
 	 */
+	@Override
 	public String toString() {
 		if(this.isZero()) {return "0";}
 		String ans;
@@ -250,13 +269,12 @@ public class Monom implements function{
 	private int _power;
 	@Override
 	public function initFromString(String s) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Monom(s);
 	}
 	@Override
 	public function copy() {
-		// TODO Auto-generated method stub
-		return null;
+		Monom temp = new Monom(this);
+		return temp;
 	}
 
 

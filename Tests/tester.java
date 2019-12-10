@@ -9,6 +9,14 @@ import myMath.Range;
 public class tester {
 
 	public static void main(String[] args) {
+		
+		Polynom p1 = new Polynom("4*x^4 + 3*x^3 + 2*x^2");
+		Polynom poly = new Polynom("X-2");
+//		Polynom poly = new Polynom("x -2");
+		System.out.println(poly.toString());
+		System.out.println("Stop");
+		
+		
 		ComplexFunction f = new ComplexFunction("plus",new Polynom("x^2"),new Polynom("x^2"));
 		ComplexFunction f2 = new ComplexFunction("plus",new Polynom("x"),new Polynom("x"));
 

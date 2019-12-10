@@ -98,8 +98,6 @@ public class ComplexFunction implements complex_function {
 		if(this instanceof ComplexFunction) {
 			helper= (ComplexFunction)this.copy();
 			this.left = helper;
-			helper= (ComplexFunction)this.copy();
-			this.left = helper;
 			if(flag) { //if you add something to itself this code is needed, or else it will create an infinit loop
 				ComplexFunction helper2 = new ComplexFunction();
 				helper2 = (ComplexFunction)helper.copy();
@@ -127,8 +125,6 @@ public class ComplexFunction implements complex_function {
 		if(this==f1) {flag=true;}
 		ComplexFunction helper = new ComplexFunction();
 		if(this instanceof ComplexFunction) {
-			helper= (ComplexFunction)this.copy();
-			this.left = helper;
 			helper= (ComplexFunction)this.copy();
 			this.left = helper;
 			if(flag) { //if you add something to itself this code is needed, or else it will create an infinit loop
@@ -378,6 +374,14 @@ public class ComplexFunction implements complex_function {
 	 */
 	@Override
 	public function initFromString(String s) {
+		if(!s.contains("(") && !s.contains(")") && !s.contains(",")) {
+			//In this case the given string input is not a CF on it's own, but a Polynom(or Monom).
+			//So we make a None Operator CF that has the input as it's left value
+			ComplexFunction helper = new ComplexFunction();
+			helper.setOp("None");
+			helper.left = new Polynom(s);
+			return helper;
+		}
 
 		ComplexFunction helper = new ComplexFunction();
 		int LocationOfFirstBracket = s.indexOf("("); //location of first (
@@ -518,13 +522,29 @@ public class ComplexFunction implements complex_function {
 		return f;
 	}
 	
-	
+	@Override
 	public boolean equals(Object obj) {
-		if(this.toString().contentEquals(obj.toString())) return true;
+		if(this==obj)return true; //case of actual same object
+		if(this.toString().contentEquals(obj.toString())) return true; //case of same string
+		if(!(obj instanceof function)) {return false;} //this is a CF, if the other isn't a function and it's string isn't equal to this, they are not equal.
 		
 		
-		
-		return false;
+		function compareMe;
+		if(obj instanceof Monom) {compareMe = (Monom) obj;}
+		else if (obj instanceof Polynom) {compareMe = (Polynom) obj;}
+		else {compareMe = (ComplexFunction) obj;}
+		double randomNumber;
+		for (int i = -1000000; i < 1000000; i=i+2000) {
+			randomNumber = Math.random()*2000 + i;
+			double mine = this.f(randomNumber);
+			double his = compareMe.f(randomNumber);
+			double result = Math.abs(mine-his);
+			if(result>0.001) {
+				return false;
+			}
+
+		}
+		return true;
 	}
 	
 }

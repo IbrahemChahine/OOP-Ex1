@@ -71,11 +71,29 @@ public class Polynom implements Polynom_able{
 	}
 	*/
 	public Polynom(String s) {
-		if(s.contains("- ") || s.contains("+ ") || s.contains("^ ")) {throw new RuntimeException("String sent to init a polynom contains '+ ' or '- ' or '^ ' and thus is illegal. The string was - " + s);}
+		if(s.contains("^-") || s.contains("^- ") || s.contains("^+ ") || s.contains("^ ") || s.contains("**") || s.contains("^^")) {throw new RuntimeException("String sent to init a polynom contains '**' or '^^' or '^ ' and thus is illegal. The string was - " + s);}
+		
+		//Now creating a copy of the input string and checking if it contains any characters other than xX+- and numbers.
+		String temp1 = s;
+		temp1 = temp1.toLowerCase();
+		temp1 = temp1.replaceAll("x", "");
+		for (int i = 0; i <= 9; i++) {temp1 = temp1.replaceAll(String.valueOf(i), "");}
+		temp1 = temp1.replaceAll("\\^", "");
+		temp1 = temp1.replaceAll("\\.", "");
+		temp1 = temp1.replaceAll(" ", "");
+		temp1 = temp1.replaceAll("\\+", "");
+		temp1 = temp1.replaceAll("-", "");
+		temp1 = temp1.replaceAll("\\*","");
+		if(!(temp1.length()==0)){
+			throw new RuntimeException("String contains illegal characters!");}
+
+		
 		while(s.charAt(0)==' ') {s = s.substring(1, s.length());} //get rid of all spaces at the beginning
 		while(s.charAt(s.length()-1)==' ') {s=s.substring(0,s.length()-1);}//get rid of spaces at the end
 		if(s.contains(" ")) {//if there are more spaces in the string, check it is OK.
 			String temp = s;
+			while(temp.contains("+ ")){temp = temp.replaceAll("\\+ ", "+");}
+			while(temp.contains("- ")){temp = temp.replaceAll("- ", "-");}
 			while(temp.contains(" ")) {
 				temp = temp.substring(temp.indexOf(" ")+1, temp.length());
 				while(temp.charAt(0)==' ') {temp = temp.substring(1, temp.length());} //advance until 1st character isn't space
@@ -84,6 +102,7 @@ public class Polynom implements Polynom_able{
 		}//end if
 		
 		s = s.replaceAll(" ", ""); //If you got here, the string is OK. Now just remove the spaces.
+		s = s.replaceAll("\\*", "");
 		if (s.equals("") || s.equals("EmptyPolynom")) {return;}		
 		//empty string or copying from an empty polynom - the polynom will be empty.
 
@@ -245,6 +264,19 @@ public class Polynom implements Polynom_able{
 		if(itAble.hasNext() || itPoly.hasNext()) return false;
 		return true;
 	}
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Polynom_able) {
+			return this.equals((Polynom_able) obj);
+		}
+		else if(obj instanceof Monom) {
+			Polynom temp = new Polynom();
+			temp.add((Monom)obj);
+			return this.equals(temp);
+		}
+		else {return false;}
+	}
+	
 	/**
 	 * The function check's if the Polynom is empty - if it is, it means it is the zero Polynom.
 	 *@return true if it is the zero Polynom.
@@ -365,7 +397,7 @@ public class Polynom implements Polynom_able{
 	public void empty() { // clearing the Polynom (making it the zero polynom).
 		Polynom.clear();
 	}
-	
+	@Override
 	public String toString() {
 		String answer = "";
 		if(this.isZero()) {return "EmptyPolynom";}
