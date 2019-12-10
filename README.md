@@ -89,11 +89,6 @@ toString() -  returns a string that represents a complex function.
 For help you can go to the javadoc. 
 you can get bigger explanations for the methods if the classes.
 
-
-## Roadmap
-
-In the next project i will create a **Graph Function** to print the graph of the function.
-
 ## Contributing
 
 If you want to make changes to the code i will recommend to go over the tester before, it will help you to understand the classes.
