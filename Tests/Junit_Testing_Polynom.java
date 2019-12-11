@@ -18,12 +18,12 @@ class Junit_Testing_Polynom {
 
 		Polynom p1 = new Polynom();
 		p1.add(m0); p1.add(m1); p1.add(m2);
-		Iterator<Monom> it = p1.iteretor();
-		for(int i=0; it.hasNext(); i++) {
-			Monom m = it.next();
-			assertEquals(arr[i],m.get_coefficient());
-			assertEquals(arr2[i],m.get_power());
-		}
+		assertEquals(arr[0],m0.get_coefficient());
+		assertEquals(arr2[0],m0.get_power());
+		assertEquals(arr[1],m1.get_coefficient());
+		assertEquals(arr2[1],m1.get_power());
+		assertEquals(arr[2],m2.get_coefficient());
+		assertEquals(arr2[2],m2.get_power());
 	}
 	@Test
 	public void equalsTest() {
@@ -100,7 +100,8 @@ class Junit_Testing_Polynom {
 	public void derivativeTest() {
 		Polynom p = new Polynom("8x^4 + 7x^3 + 5x^2 + 3x^1 + 5");
 		Polynom Pderiv= new Polynom("32x^3+21x^2+10x^1+3");
-		assertTrue(p.derivative().equals(Pderiv));
+		p = (Polynom) p.derivative();
+		assertTrue(p.equals(Pderiv));
 	}
 	@Test
 	public void areaTest() {

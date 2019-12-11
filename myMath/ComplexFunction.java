@@ -1,5 +1,10 @@
 package myMath;
 
+/** This interface represents a complex function of type y=g(f1(x), f2(x)), where both f1, f2 are functions (or complex functions), 
+ * y and x are real numbers and g is an operation: plus, mul, div, max, min, comp (f1(f2(x))).
+ * @author Ibrahem Chahine and Ofir Peller.
+**/
+
 public class ComplexFunction implements complex_function {
 	/**
 	 * 
@@ -20,10 +25,10 @@ public class ComplexFunction implements complex_function {
 		this.Op = Operation.None;
 	}
 	/*
-	 * A constructor that builds a complex function with String as the Operation and a peer of functions for the left and right.
-	 * @param string - A string represented as a Operation. 
-	 * @param p1 - A function for the left side of this complex function, this function can be ComplexFunction or Polynom or Monom.
-	 * @param p2 - A function for the left side of this complex function, this function can be ComplexFunction or Polynom or Monom or null.
+	 * A constructor that builds a complex function with String as the Operation and a pair of functions for the left and right.
+	 * @param string - A string representing an Operation. 
+	 * @param p1 - A function for the left side of this complex function, this function can be a ComplexFunction, a Polynom, or a Monom.
+	 * @param p2 - A function for the left side of this complex function, this function can be a ComplexFunction, a Polynom, a Monom or null.
 	 */
 	public ComplexFunction(String string, function p1, function p2) {
 		this.left = p1;
@@ -39,10 +44,10 @@ public class ComplexFunction implements complex_function {
 
 	}
 	/*
-	 * A constructor that builds a complex function with the Operation and a peer of functions for the left and right.
+	 * A constructor that builds a complex function with the Operation and a pair of functions for the left and right.
 	 * @param OP - The Operation. 
-	 * @param p1 - A function for the left side of this complex function, this function can be ComplexFunction or Polynom or Monom.
-	 * @param p2 - A function for the left side of this complex function, this function can be ComplexFunction or Polynom or Monom or null.
+	 * @param p1 - A function for the left side of this complex function, this function can be a ComplexFunction, a Polynom, or a Monom.
+	 * @param p2 - A function for the left side of this complex function, this function can be a ComplexFunction, a Polynom, a Monom, or null.
 	 */
 	public ComplexFunction(Operation OP, function p1, function p2) {
 		this.left = p1;
@@ -50,17 +55,17 @@ public class ComplexFunction implements complex_function {
 		this.Op = OP;
 	}
 	/*
-	 * A constructor that builds a complex function  with the left .
-	 * @param left - A function for the left side of this complex function, this function can be ComplexFunction or Polynom or Monom.
+	 * A constructor that builds a complex function  with only a left function.
+	 * @param left - A function for the left side of this complex function, this function can be a ComplexFunction, a Polynom, or a Monom.
 	 * The Operation of this complex function is None.
 	 */
 	public ComplexFunction(function left) {
 		this.left = left;
 		this.Op = Operation.None;
 	}
-	/** Add to this complex_function the f1 complex_function 
-	 * @param f1 the complex_function which will be added to this complex_function.
-	 * @param flag - This parameter helps us to know if the this and f1 are eqaul.
+	/** Add to this complex_function the f1 function 
+	 * @param f1 The function that will be the right side of the resulting complex_function.
+	 * @param flag - This parameter helps us to know if this and f1 are eqaul.
 	 * @param helper - helper is a copy of this ComplexFunction, we use it if this is a ComplexFunction.
 	 * @param helperPolynom - helper is a copy of this Polynom, we use it if this is a Polynom or Monom.
 	 */
@@ -72,7 +77,7 @@ public class ComplexFunction implements complex_function {
 		if(this instanceof ComplexFunction) {
 			helper= (ComplexFunction)this.copy();
 			this.left = helper;
-			if(flag) { //if you add something to itself this code is needed, or else it will create an infinit loop
+			if(flag) { //if you add something to itself this code is needed, or else it will create an infinite loop
 				ComplexFunction helper2 = new ComplexFunction();
 				helper2 = (ComplexFunction)helper.copy();
 				this.right = helper2;
@@ -87,8 +92,11 @@ public class ComplexFunction implements complex_function {
 			this.Op = Operation.Plus;
 		}
 	}
-	/** multiply this complex_function and the given f1 complex_function 
-	 * @param f1 the complex_function which will be multiplyed with this complex_function.
+	/** multiply this complex_function and the given f1 function 
+	 * @param f1 The function that will be the right side of the resulting CF.
+	 * @param flag - This parameter helps us to know if the this and f1 are eqaul.
+	 * @param helper - helper is a copy of this ComplexFunction, we use it if this is a ComplexFunction.
+	 * @param helperPolynom - helper is a copy of this Polynom, we use it if this is a Polynom or Monom.
 	 */
 	@Override
 	public void mul(function f1) {
@@ -98,7 +106,7 @@ public class ComplexFunction implements complex_function {
 		if(this instanceof ComplexFunction) {
 			helper= (ComplexFunction)this.copy();
 			this.left = helper;
-			if(flag) { //if you add something to itself this code is needed, or else it will create an infinit loop
+			if(flag) { //if you add something to itself this code is needed, or else it will create an infinite loop
 				ComplexFunction helper2 = new ComplexFunction();
 				helper2 = (ComplexFunction)helper.copy();
 				this.right = helper2;
@@ -113,8 +121,8 @@ public class ComplexFunction implements complex_function {
 			this.Op = Operation.Times;
 		}
 	}
-	/** divide this complex_function and the given f1 complex_function 
-	 * @param f1 the complex_function which will be divided with this complex_function.
+	/** divide this complex_function and the given f1 function 
+	 * @param f1 The function that will be the right side of the resulting CF.
 	 * @param flag - This parameter helps us to know if the this and f1 are eqaul.
 	 * @param helper - helper is a copy of this ComplexFunction, we use it if this is a ComplexFunction.
 	 * @param helperPolynom - helper is a copy of this Polynom, we use it if this is a Polynom or Monom.
@@ -127,7 +135,7 @@ public class ComplexFunction implements complex_function {
 		if(this instanceof ComplexFunction) {
 			helper= (ComplexFunction)this.copy();
 			this.left = helper;
-			if(flag) { //if you add something to itself this code is needed, or else it will create an infinit loop
+			if(flag) { //if you add something to itself this code is needed, or else it will create an infinite loop
 				ComplexFunction helper2 = new ComplexFunction();
 				helper2 = (ComplexFunction)helper.copy();
 				this.right = helper2;
@@ -142,8 +150,8 @@ public class ComplexFunction implements complex_function {
 			this.Op = Operation.Divid;
 		}
 	}
-	/** max between this complex_function and the given f1 complex_function 
-	 * @param f1 the complex_function which will be compared with this complex_function. to compute  max  
+	/** max between this complex_function and the given f1 function 
+	 * @param f1 The function that will be the right side of the resulting CF.  
 	 * @param flag - This parameter helps us to know if the this and f1 are eqaul.
 	 * @param helper - helper is a copy of this ComplexFunction, we use it if this is a ComplexFunction.
 	 * @param helperPolynom - helper is a copy of this Polynom, we use it if this is a Polynom or Monom.
@@ -156,7 +164,7 @@ public class ComplexFunction implements complex_function {
 		if(this instanceof ComplexFunction) {
 			helper= (ComplexFunction)this.copy();
 			this.left = helper;
-			if(flag) { //if you add something to itself this code is needed, or else it will create an infinit loop
+			if(flag) { //if you add something to itself this code is needed, or else it will create an infinite loop
 				ComplexFunction helper2 = new ComplexFunction();
 				helper2 = (ComplexFunction)helper.copy();
 				this.right = helper2;
@@ -171,8 +179,8 @@ public class ComplexFunction implements complex_function {
 			this.Op = Operation.Max;
 		}
 	}	
-	/** min between this complex_function and the given f1 complex_function 
-	 * @param f1 the complex_function which will be compared with this complex_function. to compute  min  .
+	/** min between this complex_function and the given f1 function 
+	 * @param f1 The function that will be the right side of the resulting CF.
 	 * @param flag - This parameter helps us to know if the this and f1 are eqaul.
 	 * @param helper - helper is a copy of this ComplexFunction, we use it if this is a ComplexFunction.
 	 * @param helperPolynom - helper is a copy of this Polynom, we use it if this is a Polynom or Monom.
@@ -185,7 +193,7 @@ public class ComplexFunction implements complex_function {
 		if(this instanceof ComplexFunction) {
 			helper= (ComplexFunction)this.copy();
 			this.left = helper;
-			if(flag) { //if you add something to itself this code is needed, or else it will create an infinit loop
+			if(flag) { //if you add something to itself this code is needed, or else it will create an infinite loop
 				ComplexFunction helper2 = new ComplexFunction();
 				helper2 = (ComplexFunction)helper.copy();
 				this.right = helper2;
@@ -200,9 +208,9 @@ public class ComplexFunction implements complex_function {
 			this.Op = Operation.Min;
 		}
 	}
-	/** min between this complex_function and the given f1 complex_function 
-	 * This method wrap the f1 complex_function with this function: this.f(f1(x))
-	 * @param f1 complex function.
+	/**
+	 * This method wraps the given f1 function with this CF, so that after the method is done, this.f(x) = this.f(f1(x))
+	 * @param f1 The function that will be the wrapped function in the resulting CF.
 	 * @param flag - This parameter helps us to know if the this and f1 are eqaul.
 	 * @param helper - helper is a copy of this ComplexFunction, we use it if this is a ComplexFunction.
 	 * @param helperPolynom - helper is a copy of this Polynom, we use it if this is a Polynom or Monom.
@@ -215,7 +223,7 @@ public class ComplexFunction implements complex_function {
 		if(this instanceof ComplexFunction) {
 			helper= (ComplexFunction)this.copy();
 			this.left = helper;
-			if(flag) { //if you add something to itself this code is needed, or else it will create an infinit loop
+			if(flag) { //if you add something to itself this code is needed, or else it will create an infinite loop
 				ComplexFunction helper2 = new ComplexFunction();
 				helper2 = (ComplexFunction)helper.copy();
 				this.right = helper2;
@@ -245,22 +253,48 @@ public class ComplexFunction implements complex_function {
 		return this.right;
 	}
 	/**
-	 * The complex_function oparation: plus, mul, div, max, min, comp
-	 * @return this.Op - the OPeration of this.
+	 * The complex_function oparation: plus, mul, div, max, min, comp, none or error
+	 * @return this.Op - the Operation of this.
 	 */
 	@Override
 	public Operation getOp() {
 		return this.Op;
 	}
 	/*
-	 * This method computes the value of the complex function with value x.
+	 * This method computes the value of the complex function for a given value x.
 	 */
 	@Override
 	public double f(double x) {
 		if(this.Op.name()=="None" ){
-			if(this.right!=null){throw new RuntimeException("Was asked to calculate f(x) for a ComplexFunction that has None as Operator and has both a Left and Right. Illegal!");}
-			else {return this.left.f(x);}
-		}
+			if(this.right!=null){
+				if(this.right instanceof Polynom_able) {
+					Polynom tempPoly = (Polynom) this.right;
+					if (tempPoly.isZero()) {return this.left.f(x);}
+					else {throw new RuntimeException("Was asked to calculate f(x) for a ComplexFunction that has None as Operator and has both a Left and Right. Illegal!");}
+				}
+				else if(this.right instanceof Monom) {
+					Monom tempMonom = (Monom) this.right;
+					if(tempMonom.isZero()) {return this.left.f(x);}
+					else {throw new RuntimeException("Was asked to calculate f(x) for a ComplexFunction that has None as Operator and has both a Left and Right. Illegal!");}
+				}
+				throw new RuntimeException("Was asked to calculate f(x) for a ComplexFunction that has None as Operator and has both a Left and Right. Illegal!");
+				}
+			else {
+				if(this.left instanceof Polynom) {
+					Polynom tempPoly = (Polynom) this.left;
+					return tempPoly.f(x);
+				}
+				else if(this.left instanceof Monom) {
+					Monom tempMonom = (Monom) this.left;
+					return tempMonom.f(x);
+				}
+				else {
+					ComplexFunction tempCF = (ComplexFunction) this.left;
+					return tempCF.f(x);
+				}
+			}
+		}//end OP is none case
+		
 		if(this.Op.name()=="Error") throw new RuntimeException("Used f function on ComplexFunction that has Error as it's OP");
 
 		double LeftValue = 0;
@@ -304,6 +338,8 @@ public class ComplexFunction implements complex_function {
 	}
 	/*
 	 * this method set the Operation with a string.
+	 * please note that 'error' and 'none' will be accepted as an input and set the OP accordingly, but each have a special case when calculating this.f(x).
+	 * Any string given with an invalid value (not an option of Operation class) will throw an exception.
 	 */
 	public Operation setOp(String s) {
 		String string = s.toLowerCase();
@@ -362,15 +398,15 @@ public class ComplexFunction implements complex_function {
 	 * This method returns a function from a string represented an a function.
 	 * @param s - A string that represents a function.
 	 * @param helper - the function that the method will return.
-	 * @param LocationOfFirstBracket - the location of the First Bracket
+	 * @param LocationOfFirstBracket - the location of the First Bracket in the string, if such exists.
 	 * @param operatorString - A string that represents the Operation of the function.
 	 * @param NumOfBrackets - the number of brackets found in the string.
-	 * @param mainCommaIndex - the index of the main comma in the function, Example = say p and q is functions then 
-	 * consider { "plus(p,q)"_} we get that the main comma index is 9.
-	 * @param Left_Flag - this boolean value is true is the left function in the string is a ComplexFunction.
-	 * @param leftSidePolynom - if Left_Flag is false then left is a polynom so this parameter is the left.
-	 * @param rightSideCF - if the right side is ComplexFunction then this parameter is the right.
-	 * @param rightSidePolynom - if the right side is Polynom then this parameter is the right.
+	 * @param mainCommaIndex - the index of the main comma in the function, Example = say p and q are functions then 
+	 * consider the input to be {"plus(p,q)"} we get that the main comma index is 6.
+	 * @param Left_Flag - this boolean value is true if the left function in the string represents a ComplexFunction.
+	 * @param leftSidePolynom - if Left_Flag is false then left is a polynom so this variable will be used as the left side.
+	 * @param rightSideCF - if the right side is ComplexFunction then this parameter is the right side of the returned CF.
+	 * @param rightSidePolynom - if the right side is Polynom then this parameter is the right side of the returned CF.
 	 */
 	@Override
 	public function initFromString(String s) {
@@ -433,34 +469,7 @@ public class ComplexFunction implements complex_function {
 		}
 		return helper;
 	}
-	/*public String toSrting() {
-		String left;
-		String right;
-		
-		if(this.left instanceof ComplexFunction) {
-			left = toString((ComplexFunction) this.left);
-		}
-		else if(this.left instanceof Polynom) {
-			left = ((Polynom) this.left).toString();
-		}
-		else{
-			left = ((Monom) this.left).toString();
-		}
-		
-		if(this.right==null) {right="";}
-		else if(this.right instanceof ComplexFunction) {
-			right = toString((ComplexFunction) this.right);
-		}
-		else if(this.right instanceof Polynom) {
-			right = ((Polynom) this.right).toString();
-		}
-		else{
-			right = ((Monom) this.right).toString();
-		}
-		
-		return this.Op + "(" + left + "," + right + ")";
-	}*/
-	//new, not on github.
+	
 	/*
 	 * @returns a string that represent this ComplexFunction.
 	 */
@@ -468,25 +477,17 @@ public class ComplexFunction implements complex_function {
 	public String toString() {
 		return toString2(this);
 	}
+	/*
+	 * @param s - the given CF, that's toString value was asked.
+	 * @returns a string that represent the given ComplexFunction.
+	 */
 	public String toString2(ComplexFunction s) {
-//		if(s.left instanceof ComplexFunction && s.right instanceof ComplexFunction) {
-//			return s.Op + "(" + toString((ComplexFunction) s.left) + "," + toString((ComplexFunction) s.right) + ")";
-//		}
-//		else if(s.left instanceof ComplexFunction) { // we need to add right = NULL case
-//			return s.Op+"("+toString((ComplexFunction) s.left)+","+s.right.toString() + ")";
-//		}
-//		else if(s.right instanceof ComplexFunction) {
-//			return s.Op +"("+ s.left.toString() +","+ toString((ComplexFunction) s.right) +")";
-//		}
-//		return s.Op + "(" + s.left.toString() + " , " + s.right.toString() + ")";
-		
 		String left;
 		String right;
 		
 		if(s.left instanceof ComplexFunction) {
 			ComplexFunction temp = (ComplexFunction) s.left;
 			left = temp.toString();
-//			left = toString2((ComplexFunction) s.left);
 		}
 		else if(s.left instanceof Polynom) {
 			left = ((Polynom) s.left).toString();
@@ -499,7 +500,6 @@ public class ComplexFunction implements complex_function {
 		else if(s.right instanceof ComplexFunction) {
 			ComplexFunction temp2 = (ComplexFunction) s.right;
 			right = temp2.toString();
-//			right = toString2((ComplexFunction) s.right);
 		}
 		else if(s.right instanceof Polynom) {
 			right = ((Polynom) s.right).toString();

@@ -18,7 +18,7 @@ import myMath.Monom;
  * 2. Finding a numerical value between two values.
  * 3. Derivative
  * 
- * @author Ibrahem chahine.
+ * @author Ibrahem chahine and Ofir Peller.
  *
  */
 public class Polynom implements Polynom_able{
@@ -76,6 +76,10 @@ public class Polynom implements Polynom_able{
 		//Now creating a copy of the input string and checking if it contains any characters other than xX+- and numbers.
 		String temp1 = s;
 		temp1 = temp1.toLowerCase();
+		temp1 = temp1.replaceAll(" ", "");
+		if(temp1.length()==0 || temp1.contentEquals("emptypolynom")) {return;}
+		temp1 = s;
+		temp1 = temp1.toLowerCase();
 		temp1 = temp1.replaceAll("x", "");
 		for (int i = 0; i <= 9; i++) {temp1 = temp1.replaceAll(String.valueOf(i), "");}
 		temp1 = temp1.replaceAll("\\^", "");
@@ -87,7 +91,6 @@ public class Polynom implements Polynom_able{
 		if(!(temp1.length()==0)){
 			throw new RuntimeException("String contains illegal characters!");}
 
-		
 		while(s.charAt(0)==' ') {s = s.substring(1, s.length());} //get rid of all spaces at the beginning
 		while(s.charAt(s.length()-1)==' ') {s=s.substring(0,s.length()-1);}//get rid of spaces at the end
 		if(s.contains(" ")) {//if there are more spaces in the string, check it is OK.
@@ -333,7 +336,7 @@ public class Polynom implements Polynom_able{
 		Iterator<Monom> it = Polynom.iterator();
 		while(it.hasNext()) {
 			Monom m = new Monom(it.next());
-			m.derivative();
+			m = m.derivative();
 			if(m.get_coefficient()!=0)
 				helper.add(m);
 		}

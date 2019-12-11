@@ -1,6 +1,6 @@
 package myMath;
-import java.awt.Color;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -12,28 +12,20 @@ import java.util.Collection;
 import java.util.Iterator;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+/**
+ * This interface represents a collection of mathematical functions
+ *  which can be presented on a GUI window and can be saved (and load) to file. 
+ *  @author Ibrahem Chahine and Ofir Peller.
+ */
+
+
 public class Functions_GUI implements functions {
 	public ArrayList<function> group = new ArrayList<function>();
 	public static Color[] Colors = {Color.blue, Color.cyan, Color.MAGENTA, Color.ORANGE, 
 			Color.red, Color.GREEN, Color.PINK};
-//	private static int Width;
-//	private static int Height;
-//	private static int Resolution; 
-//	private static Range  Range_X;
-//	private static Range Range_Y;
 	@Override
 	public boolean add(function arg0) {
-		//		if(arg0 instanceof Polynom) {
-		////			Polynom tempPoly = new Polynom((Polynom) arg0);
-		////			this.group.add(tempPoly);
-		//		}
-		//		else if(arg0 instanceof Monom) {
-		//			this.group.add((Monom)arg0);
-		//		}
-		//		else {
-		//			this.group.add((ComplexFunction)arg0);
-		//		}
-		//		System.out.println("I am here " + arg0.toString());
 		this.group.add(arg0);
 		return true;
 	}
@@ -53,38 +45,8 @@ public class Functions_GUI implements functions {
 	}
 
 	@Override
-	public boolean contains(Object arg0) {//TODO check if this works
-		if(!(arg0 instanceof function)) {
-			throw new RuntimeException("Was asked to check if a Functions_GUI object contains a non-function object - illegal");
-		}
-		Iterator<function> itr = this.iterator();
-		boolean answer = false;
-		while(itr.hasNext() && !answer) {
-			function current = itr.next();
-			if(current==arg0) {return true;} //in case they point at the same object
-
-			//Cast the current function object
-			if(current instanceof Monom) {
-				Monom temp = (Monom) current;
-				System.out.println("Now comparing with " + temp.toString());
-				if(temp.toString().contentEquals(arg0.toString())) {answer=true;}
-			}
-			else if(current instanceof Polynom) {
-				Polynom temp = (Polynom) current;
-				System.out.println("Now comparing with " + temp.toString());
-				if(temp.toString().contentEquals(arg0.toString())) {answer=true;}
-			}
-			else {
-				ComplexFunction temp = (ComplexFunction) current;
-				System.out.println("Now comparing with " + temp.toString());
-				if(temp.toString().contentEquals(arg0.toString())) {answer=true;}
-			}
-
-			//			System.out.println("Now comparing with " + temp.toString());
-
-			//			if(temp.toString().contentEquals(arg0.toString())) {answer=true;}
-		}
-		return answer;
+	public boolean contains(Object arg0) {
+		return group.contains(arg0);
 	}
 
 	@Override
@@ -159,13 +121,11 @@ public class Functions_GUI implements functions {
 
 	@Override
 	public Object[] toArray() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> T[] toArray(T[] arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	/*
@@ -174,7 +134,7 @@ public class Functions_GUI implements functions {
 	 * @param line helps us to build the functions.
 	 * @param fileReaderr a class in java to read files.
 	 * @param bufferedReader gives us the lines in the files.
- 	 */
+	 */
 	@Override
 	public void initFromFile(String file) throws IOException {
 		String line = null;
@@ -211,7 +171,6 @@ public class Functions_GUI implements functions {
 	public void saveToFile(String file) throws IOException {
 		FileWriter fr = null;
 		BufferedWriter br = null;
-		//String dataWithNewLine=data+System.getProperty("line.separator");
 		try{
 			fr = new FileWriter(file);
 			br = new BufferedWriter(fr);
@@ -252,7 +211,13 @@ public class Functions_GUI implements functions {
 		for (int i=0; i<=resolution; i++) {
 			xArray[i] = x0;
 			for(int a=0;a<size;a++) {
-				yArray[a][i] = this.group.get(a).f(xArray[i]);
+				try {
+					yArray[a][i] = this.group.get(a).f(xArray[i]);
+				}
+				catch(Exception e) {//in case if dividing by 0
+					yArray[a][i] = 214748364;
+				}
+
 			}
 			x0+=x_step;
 		}
@@ -261,22 +226,27 @@ public class Functions_GUI implements functions {
 		StdDraw.setYscale(ry.get_min(), ry.get_max());
 		StdDraw.line(rx.get_min(),0,rx.get_max(),0);
 		StdDraw.line(0,ry.get_min(),0,ry.get_max());
-		StdDraw.setPenRadius(0.007);
+		StdDraw.setPenRadius(0.006);
 		// plot the approximation to the function
 		for(int a=0;a<size;a++) {
 			int c = a%Colors.length;
 			StdDraw.setPenColor(Colors[c]);// set color.
 			System.out.println(a+") "+Colors[a]+"f(x)= "+this.group.get(a).toString());
 			for (int i = 0; i < resolution; i++) {
+				if(yArray[a][i]==214748364 || yArray[a][i+1]==214748364) {
+					continue;
+				}
+				
 				StdDraw.line(xArray[i], yArray[a][i], xArray[i+1], yArray[a][i+1]);
+
 			}
 		}	
 	}//end drawFunctions
-	 /**
+	/**
 	 * Draws all the functions in the collection in a GUI window using the given JSON file
 	 * @param json_file - the file with all the parameters for the GUI window. 
 	 * Note: is the file id not readable or in wrong format should use default values. 
-	*/
+	 */
 	@Override
 	public void drawFunctions(String json_file) {
 		String rangex;
@@ -301,22 +271,18 @@ public class Functions_GUI implements functions {
 			rangex.substring(1,rangex.length()-1);
 		}
 		catch(Exception e) {throw new RuntimeException("Range_X value too short, it is illegal");}
-		
+
 		int commaCounter=0;
 		for(int i=0;i<rangex.length();i++) {
 			if(rangex.charAt(i)==',') {commaCounter++;}
 		}
 		if(commaCounter>1 || commaCounter==0 || rangex.charAt(rangex.length()-1)==',') {throw new RuntimeException("Illegal value given for rangeX");}
 		int commaLocation = rangex.indexOf(",");
-		
+
 		Range rx = new Range(0,0); 
 		rx = new Range((int)Integer.parseInt(rangex.substring(1,commaLocation)),(int)Integer.parseInt(rangex.substring(commaLocation+1,rangex.length()-1)));
-//		for(int i=0;i<rangex.length();i++) {
-//			if(rangex.charAt(i) == ',') {
-//				rx = new Range((int)Integer.parseInt(rangex.substring(1,rangex.indexOf(','))),(int)Integer.parseInt(rangex.substring(rangex.indexOf(',')+1,rangex.length()-1)));
-//			}
-//		}
-		
+
+
 		commaCounter=0;
 		for(int i=0;i<rangey.length();i++) {
 			if(rangey.charAt(i)==',') {commaCounter++;}
@@ -325,28 +291,15 @@ public class Functions_GUI implements functions {
 		commaLocation = rangey.indexOf(",");
 		Range ry= new Range(0,0);
 		ry = new Range((int) Integer.parseInt(rangey.substring(1,commaLocation)),(int) Integer.parseInt(rangey.substring(commaLocation+1,rangey.length()-1)));
-//		for(int i=0;i<rangey.length();i++) {
-//			if(rangex.charAt(i) == ',') {
-//				ry = new Range((int) Integer.parseInt(rangex.substring(1,rangex.indexOf(','))),(int) Integer.parseInt(rangex.substring(rangex.indexOf(',')+1,rangex.length()-1)));
-//			}
-//		}
 		drawFunctions(Width,Height,rx,ry,Resolution);
 	}
-	//
+
 	public static Object readJsonSimpleDemo(String filename) throws Exception {
 		FileReader reader = new FileReader(filename);
 		JSONParser jsonParser = new JSONParser();
 		return jsonParser.parse(reader);
 	}
-	/*
-	 {
-	"Width":400,
-	"Height":400,
-	"Resolution":1500,
-	"Range_X":[-10,10],
-	"Range_Y":[-10,10]
-	}
-	 */
+
 
 
 }

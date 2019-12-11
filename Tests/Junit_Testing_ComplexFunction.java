@@ -17,7 +17,6 @@ class Junit_Testing_ComplexFunction {
 		f1.plus(f1);
 		assertTrue(f1_Plus_f1.equals(f1));
 	}
-	
 	@Test
 	void mul() {
 		ComplexFunction f1 = new ComplexFunction("plus",new Polynom("x^2"), new Polynom("x^2"));
@@ -82,6 +81,5 @@ class Junit_Testing_ComplexFunction {
 		ComplexFunction f1 = new ComplexFunction("plus",new Polynom("x^2"), new Polynom("x^2"));
 		ComplexFunction f2 = new ComplexFunction("plus",new Polynom("x^2"), new Polynom("x^2"));
 		assertTrue(f1.equals(f2));
-		
 	}	
 }

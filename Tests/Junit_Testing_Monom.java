@@ -50,7 +50,7 @@ class Junit_Testing_Monom {
 		int power = 3;
 		double Co = 5.5;
 		Monom m = new Monom(Co,power);
-		m.derivative();
+		m = m.derivative();
 		assertEquals(power-1,m.get_power());
 		assertEquals(Co*power,m.get_coefficient());
 	}

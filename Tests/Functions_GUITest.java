@@ -1,7 +1,16 @@
 package Tests;
 
+import static org.junit.Assert.assertTrue;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Iterator;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import myMath.Operation;
 
 import myMath.ComplexFunction;
 import myMath.Functions_GUI;
@@ -9,6 +18,7 @@ import myMath.Monom;
 import myMath.Polynom;
 import myMath.Range;
 import myMath.function;
+import myMath.functions;
 /**
  * Partial JUnit + main test for the GUI_Functions class, expected output from the main:
  * 0) java.awt.Color[r=0,g=0,b=255]  f(x)= plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0)
@@ -24,50 +34,111 @@ import myMath.function;
  */
 class Functions_GUITest {
 	public static void main(String[] a) {
-		Functions_GUI data = FunctionsFactory();
+		functions data = FunctionsFactory();
 		int w=1000, h=600, res=200;
 		Range rx = new Range(-10,10);
 		Range ry = new Range(-5,15);
 		data.drawFunctions(w,h,rx,ry,res);
+		String file = "function_file.txt";
+		String file2 = "function_file2.txt";
+		try {
+			data.saveToFile(file);
+			Functions_GUI data2 = new Functions_GUI();
+			data2.initFromFile(file);
+			data.saveToFile(file2);
+		}
+		catch(Exception e) {e.printStackTrace();}
+		
+		String JSON_param_file = "GUI_params.txt";
+		data.drawFunctions(JSON_param_file);	
 	}
-	private Functions_GUI _data=null;
-//	@BeforeAll
-//	static void setUpBeforeClass() throws Exception {
-//	}
-
+	private functions _data=null;
+	
+	@BeforeAll
+	static void setUpBeforeClass() throws Exception {
+        System.out.println("This is a Junit Class for the Function_GUI Class");
+	}
 	@BeforeEach
 	void setUp() throws Exception {
 		_data = FunctionsFactory();
 	}
-
-	//@Test
+	@Test
 	void testFunctions_GUI() {
-	//	fail("Not yet implemented");
+		Functions_GUI First = new Functions_GUI();
+		Functions_GUI Second = new Functions_GUI();
+		First.group.add(new Polynom("x^2"));
+		First.group.add(new Polynom("x^2-1"));
+		First.group.add(new ComplexFunction("plus",new Polynom("x^2"),new Polynom("x^2-1")));
+		Second.group.add(new Polynom("x^2"));
+		Second.group.add(new Polynom("x^2-1"));
+		Second.group.add(new ComplexFunction("plus",new Polynom("x^2"),new Polynom("x^2-1")));
+		for (int i = 0; i < 3; i++) {
+			assertTrue(First.group.get(i).equals(Second.group.get(i)));
+		}
 	}
-
-	//@Test
+	@Test
 	void testInitFromFile() {
-	//	fail("Not yet implemented");
+		Functions_GUI First = new Functions_GUI();
+		Functions_GUI Second = new Functions_GUI();
+		try {
+			First.initFromFile("testInitFromFile.txt");
+			Second.initFromFile("testInitFromFile.txt");
+			for (int i = 0; i < 3; i++) {
+				assertTrue(First.group.get(i).equals(Second.group.get(i)));
+			}
+		} catch (IOException e) {
+			
+		}
 	}
-
-	//@Test
+	@Test
 	void testSaveToFile() {
-	//	fail("Not yet implemented");
+		Functions_GUI First = new Functions_GUI();
+		Functions_GUI Second = new Functions_GUI();
+		First.group.add(new Polynom("x^2"));
+		First.group.add(new Polynom("x^2-1"));
+		First.group.add(new ComplexFunction("plus",new Polynom("x^2"),new Polynom("x^2-1")));
+		Second.group.add(new Polynom("x^2"));
+		Second.group.add(new Polynom("x^2-1"));
+		Second.group.add(new ComplexFunction("plus",new Polynom("x^2"),new Polynom("x^2-1")));
+	 	
+	    boolean areFilesIdentical = true;
+	    try {
+	    First.saveToFile("testSaveToFile_First.txt");
+		Second.saveToFile("testSaveToFile_Second.txt");
+	    FileInputStream fis1 = new FileInputStream("testSaveFromFile_First.txt");
+	    FileInputStream fis2 = new FileInputStream("testSaveFromFile_Second.txt");
+	    int i1 = fis1.read();
+	    int i2 = fis2.read();
+	    while (i1 != -1) {
+	    	if (i1 != i2) {
+	    		
+	    		areFilesIdentical = false;
+	    		break;
+	        }
+	        i1 = fis1.read();
+	        i2 = fis2.read();
+	     }
+	     fis1.close();
+	     fis2.close();
+	     assertTrue(areFilesIdentical);
+	    }
+	     catch (IOException e) {
+	    }
+	    
 	}
-
-	//@Test
+	@Test
 	void testDrawFunctions() {
-		//_data.drawFunctions();
-	//	fail("Not yet implemented");
+		_data.drawFunctions("GUI_params.json");
 	}
-
 	@Test
 	void testDrawFunctionsIntIntRangeRangeInt() {
-		_data.drawFunctions();
-		//fail("Not yet implemented");
+		int w=1000, h=600, res=200;
+		Range rx = new Range(-10,10);
+		Range ry = new Range(-5,15);
+		_data.drawFunctions(w,h,rx,ry,res);
 	}
 	public static Functions_GUI FunctionsFactory() {
-		Functions_GUI ans = new Functions_GUI();
+		functions ans = new Functions_GUI();
 		String s1 = "3.1 +2.4x^2 -x^4";
 		String s2 = "5 +2x -3.3x +0.1x^5";
 		String[] s3 = {"x +3","x -2", "x -4"};
@@ -79,7 +150,7 @@ class Functions_GUITest {
 			cf3.mul(new Polynom(s3[i]));
 		}
 		
-		ComplexFunction cf = new ComplexFunction("plus", p1,p2);
+		ComplexFunction cf = new ComplexFunction(Operation.Plus, p1,p2);
 		ComplexFunction cf4 = new ComplexFunction("div", new Polynom("x +1"),cf3);
 		cf4.plus(new Monom("2"));
 		ans.add(cf.copy());
@@ -91,15 +162,17 @@ class Functions_GUITest {
 		function cf6 = cf4.initFromString(s2);
 		ans.add(cf5.copy());
 		ans.add(cf6.copy());
-		//ComplexFunction max = new ComplexFunction(ans.get(0).copy());
-		//ComplexFunction min = new ComplexFunction(ans.get(0).copy());
-		for(int i=1;i<ans.size();i++) {
-			//max.max(ans.get(i));
-			//min.min(ans.get(i));
+		Iterator<function> iter = ans.iterator();
+		function f = iter.next();
+		ComplexFunction max = new ComplexFunction(f);
+		ComplexFunction min = new ComplexFunction(f);
+		while(iter.hasNext()) {
+			f = iter.next();
+			max.max(f);
+			min.min(f);
 		}
-		//ans.add(max);
-		//ans.add(min);
-		
-		return ans;
+		ans.add(max);
+		ans.add(min);		
+		return (Functions_GUI) ans;
 	}
 }
