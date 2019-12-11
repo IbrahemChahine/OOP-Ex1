@@ -90,7 +90,7 @@ equals(Object obj) - check if this and obj are eqaul.
 ## Support
 
 For help you can go to the javadoc. 
-you can get bigger explanations for the methods if the classes.
+you can get a better explanations for the methods in the classes.
 
 ## Contributing
 
