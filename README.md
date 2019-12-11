@@ -94,11 +94,12 @@ you can get bigger explanations for the methods if the classes.
 
 ## Contributing
 
-If you want to make changes to the code i will recommend to go over the tester before, it will help you to understand the classes.
-Now when you start its better to start with the **Monom** class and after that with the **Polynom** class.
+If you want to make changes to the code i will recommend to go over the tester before, it will help you to understand how
+the Methods and the Classes work.
+when you start its better to start with the **Monom** class and after that with the **Polynom** class and then The ComplexFunction and the Functions_GUI.
 
 ## Authors and acknowledgment
-The Author of this project is **Ibrahem chahine, Ofir Peller.**
+The Authors of this project are **Ibrahem chahine, Ofir Peller.**
 
 
 I also want to thank all the **Open Source Coders** in GitHub.
