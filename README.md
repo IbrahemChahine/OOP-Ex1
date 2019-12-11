@@ -66,7 +66,6 @@ drawFunctons(int width,int height,Range rx,Range ry, int resolution) - This meth
 drawFunction(String json_file) -  This method draws all the the function with the given values in a json file.
 ```
 
-![](https://github.com/IbrahemChahine/OOP-Ex1/issues/1#issue-535875965)
 
 **- In the Complex_Function class**
 ```
@@ -90,15 +89,17 @@ equals(Object obj) - check if this and obj are eqaul.
 ## Support
 
 For help you can go to the javadoc. 
-you can get bigger explanations for the methods if the classes.
+you can get a better explanations for the methods in the classes.
 
+In the wiki we explain how to use this project, its prefered to read the instructions in the wiki **Home** page.
 ## Contributing
 
-If you want to make changes to the code i will recommend to go over the tester before, it will help you to understand the classes.
-Now when you start its better to start with the **Monom** class and after that with the **Polynom** class.
+If you want to make changes to the code i will recommend to go over the tester before, it will help you to understand how
+the Methods and the Classes work.
+when you start its better to start with the **Monom** class and after that with the **Polynom** class and then The ComplexFunction and the Functions_GUI.
 
 ## Authors and acknowledgment
-The Author of this project is **Ibrahem chahine, Ofir Peller.**
+The Authors of this project are **Ibrahem chahine, Ofir Peller.**
 
 
 I also want to thank all the **Open Source Coders** in GitHub.
