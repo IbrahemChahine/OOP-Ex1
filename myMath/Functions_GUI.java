@@ -174,7 +174,7 @@ public class Functions_GUI implements functions {
 		try{
 			fr = new FileWriter(file);
 			br = new BufferedWriter(fr);
-			for(int i = this.group.size()-1; i>0; i--){
+			for(int i = this.group.size()-1; i>=0; i--){
 				br.write(this.group.get(i).toString());
 				br.newLine();
 			}

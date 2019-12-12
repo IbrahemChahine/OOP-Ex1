@@ -48,15 +48,15 @@ class Functions_GUITest {
 			data.saveToFile(file2);
 		}
 		catch(Exception e) {e.printStackTrace();}
-		
+
 		String JSON_param_file = "GUI_params.txt";
 		data.drawFunctions(JSON_param_file);	
 	}
 	private functions _data=null;
-	
+
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-        System.out.println("This is a Junit Class for the Function_GUI Class");
+		System.out.println("This is a Junit Class for the Function_GUI Class");
 	}
 	@BeforeEach
 	void setUp() throws Exception {
@@ -87,7 +87,7 @@ class Functions_GUITest {
 				assertTrue(First.group.get(i).equals(Second.group.get(i)));
 			}
 		} catch (IOException e) {
-			
+
 		}
 	}
 	@Test
@@ -100,31 +100,73 @@ class Functions_GUITest {
 		Second.group.add(new Polynom("x^2"));
 		Second.group.add(new Polynom("x^2-1"));
 		Second.group.add(new ComplexFunction("plus",new Polynom("x^2"),new Polynom("x^2-1")));
-	 	
-	    boolean areFilesIdentical = true;
-	    try {
-	    First.saveToFile("testSaveToFile_First.txt");
-		Second.saveToFile("testSaveToFile_Second.txt");
-	    FileInputStream fis1 = new FileInputStream("testSaveFromFile_First.txt");
-	    FileInputStream fis2 = new FileInputStream("testSaveFromFile_Second.txt");
-	    int i1 = fis1.read();
-	    int i2 = fis2.read();
-	    while (i1 != -1) {
-	    	if (i1 != i2) {
-	    		
-	    		areFilesIdentical = false;
-	    		break;
-	        }
-	        i1 = fis1.read();
-	        i2 = fis2.read();
-	     }
-	     fis1.close();
-	     fis2.close();
-	     assertTrue(areFilesIdentical);
-	    }
-	     catch (IOException e) {
-	    }
-	    
+
+		boolean areFilesIdentical = false;
+		try {
+			areFilesIdentical = true;
+			First.saveToFile("testSaveToFile_First.txt");
+			Second.saveToFile("testSaveToFile_Second.txt");
+			FileInputStream fis1 = new FileInputStream("testSaveToFile_First.txt");
+			FileInputStream fis2 = new FileInputStream("testSaveToFile_Second.txt");
+			int i1 = fis1.read();
+			int i2 = fis2.read();
+			while (i1 != -1) {
+				if (i1 != i2) {
+					areFilesIdentical = false;
+					break;
+				}
+				i1 = fis1.read();
+				i2 = fis2.read();
+			}
+			fis1.close();
+			fis2.close();
+
+			assertTrue(areFilesIdentical);
+		}
+		catch (IOException e) {
+			assertTrue(false);
+		}
+
+	}
+	@Test
+	void testBadSaveToFile() {
+		Functions_GUI First = new Functions_GUI();
+		Functions_GUI Second = new Functions_GUI();
+		First.group.add(new Polynom("x^2"));
+		First.group.add(new Polynom("x^2-1"));
+		First.group.add(new ComplexFunction("plus",new Polynom("x^2"),new Polynom("x^2-1")));
+		Second.group.add(new Polynom("x^2+0.1"));
+		Second.group.add(new Polynom("x^2-1"));
+		Second.group.add(new ComplexFunction("plus",new Polynom("x^2"),new Polynom("x^2-1")));
+		int FirstSize = First.group.size();
+		int SecindSize = Second.group.size();
+
+		boolean areFilesIdentical = false;
+		try {
+			areFilesIdentical = true;
+			First.saveToFile("testBadSaveToFile_First.txt");
+			Second.saveToFile("testBadSaveToFile_Second.txt");
+			FileInputStream fis1 = new FileInputStream("testBadSaveToFile_First.txt");
+			FileInputStream fis2 = new FileInputStream("testBadSaveToFile_Second.txt");
+			int i1 = fis1.read();
+			int i2 = fis2.read();
+			while (i1 != -1) {
+				if (i1 != i2) {
+					areFilesIdentical = false;
+					break;
+				}
+				i1 = fis1.read();
+				i2 = fis2.read();
+			}
+			fis1.close();
+			fis2.close();
+
+			assertTrue(!areFilesIdentical);
+		}
+		catch (IOException e) {
+			assertTrue(false);
+		}
+
 	}
 	@Test
 	void testDrawFunctions() {
@@ -149,7 +191,7 @@ class Functions_GUITest {
 		for(int i=1;i<s3.length;i++) {
 			cf3.mul(new Polynom(s3[i]));
 		}
-		
+
 		ComplexFunction cf = new ComplexFunction(Operation.Plus, p1,p2);
 		ComplexFunction cf4 = new ComplexFunction("div", new Polynom("x +1"),cf3);
 		cf4.plus(new Monom("2"));
