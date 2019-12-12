@@ -105,8 +105,8 @@ when you start its better to start with the **Monom** class and after that with 
 ## Authors and acknowledgment
 The Authors of this project are **Ibrahem chahine, Ofir Peller.**
 
-I also wanOpen Sourct to thank all the **e Coders** in GitHub.
-Thanks to :
+I want to thank all the GitHub open source users.
+Also, we thank :
 1. GeeksforGeeks.org, 
 2. [stackoverflow.com].
 3. [GitHub.com].
