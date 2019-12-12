@@ -94,7 +94,7 @@ equals(Object obj) - check if this and obj are eqaul.
 For help you can go to the javadoc. 
 you can get a better explanations for the methods in the classes.
 
-In the wiki we explain how to use this project, its prefered to read the instructions in the **wiki pages*.
+In the wiki we explain how to use this project, its prefered to read the instructions in the **wiki pages.**
 
 ## Contributing
 
