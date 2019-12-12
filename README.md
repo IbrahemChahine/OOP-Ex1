@@ -4,7 +4,7 @@
 
 This Project is an Exercise in an object **Object-oriented** programming (**OOP**) course in **Ariel university**.
 
-Authors: **Ibrahem chahine, Ofir Peller**
+Authors: **Ibrahem chahine, Ofir Peller.**
 
 ## Description
 
@@ -94,7 +94,8 @@ equals(Object obj) - check if this and obj are eqaul.
 For help you can go to the javadoc. 
 you can get a better explanations for the methods in the classes.
 
-In the wiki we explain how to use this project, its prefered to read the instructions in the wiki **Home** page.
+In the wiki we explain how to use this project, its prefered to read the instructions in the **wiki pages*.
+
 ## Contributing
 
 If you want to make changes to the code i will recommend to go over the tester before, it will help you to understand how
@@ -104,8 +105,7 @@ when you start its better to start with the **Monom** class and after that with 
 ## Authors and acknowledgment
 The Authors of this project are **Ibrahem chahine, Ofir Peller.**
 
-
-I also want to thank all the **Open Source Coders** in GitHub.
+I also wanOpen Sourct to thank all the **e Coders** in GitHub.
 Thanks to :
 1. GeeksforGeeks.org, 
 2. [stackoverflow.com].
