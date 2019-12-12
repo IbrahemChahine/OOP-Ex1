@@ -522,6 +522,25 @@ public class ComplexFunction implements complex_function {
 		return f;
 	}
 	
+	/*
+	 * This method checks if a given object and this CF are equal .
+	 * As "equals" can have different meanings and translations we will clarify our approach to this - 
+	 * First check - they are the exact same object (pointing at same place in memory), and if so return true.
+	 * Second check -  check if they have the same value of toString, and if so return true.
+	 * Third check - if the given object isn't an instance of function, return false. This is a CF, we do not consider objects that didn't pass the previous checks and that aren't an instance of function to be equal to a CF.
+	 * Finally - It will start checking if they have the same values for many different X values.
+	 * We took a very large range, from negative million to positive million, and divided it to 1000 different segments.
+	 * We take a random number from each of these segments, and check if they have the same value for that X, with accuracy of 1/1000.
+	 * We believe these check are very likely to catch most non-equal objects and return false for them.
+	 * Though it is important to know this is not 100% accurate and thus will not always work, but will work most of the time
+	 *
+	 * @param obj The given Object.
+	 * @param compareMe The given Object, casted, if its a function.
+	 * @param mine The value of this CF for a certain X.
+	 * @param his The value of the given object, for certain X.
+	 * @param result the difference between mine and his. 
+	 */
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(this==obj)return true; //case of actual same object
@@ -538,6 +557,12 @@ public class ComplexFunction implements complex_function {
 			randomNumber = Math.random()*2000 + i;
 			double mine = this.f(randomNumber);
 			double his = compareMe.f(randomNumber);
+			mine = mine*1000;
+			int mineINT = (int) mine;
+			mine = (double)mineINT/1000;
+			his = his*1000;
+			int hisINT = (int) his;
+			his = (double)hisINT/1000;
 			double result = Math.abs(mine-his);
 			if(result>0.001) {
 				return false;
